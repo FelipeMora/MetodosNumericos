@@ -26,4 +26,8 @@ Por el momento se encuentran integrados:
 > Metodo de Secante
 
 ## Autores
+<<<<<<< HEAD
 * Felipe Mora Fajardo - _Corporacion Tecnologica de Bogota / Tecnologia en Desarrollo de Software_
+=======
+* Felipe Mora Fajardo - _Corporacion Tecnologica de Bogota / Tecnologia en Desarrollo de Software_
+>>>>>>> 5516bf8... Init Commit
