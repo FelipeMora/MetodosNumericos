@@ -197,24 +197,27 @@ def AproximacionLineal():
     print("|--------|--------|")
     for A in range(0,int(len(ValX)/2)):
         print("|---" + ValX[A*2] +  "---|---" + ValX[(A*2)+1] + "---|")
-    sumaVAL(ValX)
-    MuliVAL(ValX)
-    Ala(ValX)
+    SumasVAL = sumaVAL(ValX)
+    MutiVAL = MuliVAL(ValX)
+    Elevar = Ala(ValX)
+    RegresionCuadratica(CantVal,SumasVAL,MutiVAL,Elevar)
 
 def sumaVAL(Val):
     SumaX = 0;
     SumaY = 0;
     for J in range(0,int(len(Val)/2)):
-        SumaY = int(Val[(J*2)+1]);
+        SumaY = int(Val[(J*2)+1]) + SumaY;
         SumaX = int(Val[J*2]) + SumaX;
-    print("SumaX = " + str(SumaX));
-    print("SumaY = " + str(SumaY));
+    """print("SumaX = " + str(SumaX));
+    print("SumaY = " + str(SumaY));"""
+    return str(SumaX)+", "+str(SumaY)
 
 def MuliVAL(Val):
     MultVAL = 0;
     for J in range(0,int(len(Val)/2)):
         MultVAL = (int(Val[(J*2)]) * int(Val[(J*2)+1]))+MultVAL;
-    print("E X*Y = " + str(MultVAL))
+    """print("E X*Y = " + str(MultVAL))"""
+    return MultVAL
 
 def Ala(Val):
     XAla = 0;
@@ -222,8 +225,20 @@ def Ala(Val):
     for J in range(0,int(len(Val)/2)):
         YAla = (int(Val[((J*2)+1)])*int(Val[((J*2)+1)])) + YAla;
         XAla = (int(Val[(J*2)])*int(Val[(J*2)])) + XAla;
-    print("E X^2 = " + str(XAla));
-    print("E Y^2 = " + str(YAla));
+    """print("E X^2 = " + str(XAla));
+    print("E Y^2 = " + str(YAla));"""
+    return str(XAla)+", "+str(YAla)
+
+def RegresionCuadratica(CantVAL,SumasVAL,MutiVAL,Elevar):
+    SumaVAL = []
+    Ala = []
+    SumaVAL = SumasVAL.split(", ")
+    Ala = Elevar.split(", ")
+    B=(int(CantVAL)*(MutiVAL)-((int(SumaVAL[0]))*(int(SumaVAL[1]))))/(int(CantVAL)*int(Ala[0])-(int(SumaVAL[0])*int(SumaVAL[0])))
+    A=((int(SumaVAL[1])-B*(int(SumaVAL[0])))/int(CantVAL))
+    print("|--------------------------------------|")
+    print("| Y = " + str(A) + " + " + str(B) + "x |")
+    print("|--------------------------------------|")
 
 print("1.) Serie de Taylor")
 print("2.) Metodo de Newton")
