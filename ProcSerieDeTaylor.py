@@ -179,11 +179,30 @@ def ErrorAcumulado(Vac,Van):
     Error = abs(((Vac-Van)/Vac)*100)
     return Error
 
+def AproximacionLineal():
+    ValX = []
+    print("Cuantos valores ingresara?");
+    CantVal = input();
+    for i in range(0,int(CantVal)):
+        print("---------------> ",i);
+        print("Ingrese los valores de X");
+        InX = input();
+        ValX.append(InX)
+        print("Ingrese los valores de Y");
+        InY = input();
+        ValX.append(InY)
+
+    print("|-----------------|")
+    print("|   X    |   Y    |")
+    print("|--------|--------|")
+    for A in range(0,int(len(ValX)/2)):
+        print("|---" + ValX[A*2] +  "---|---" + ValX[(A*2)+1] + "---|")
 
 print("1.) Serie de Taylor")
 print("2.) Metodo de Newton")
 print("3.) Metodo de Biseccion")
 print("4.) Metodo de Secante")
+print("5.) Aproximacion Lineal")
 Op = input();
 if Op == '1':
     SerieTaylor();
@@ -193,6 +212,8 @@ elif Op == '3':
     MetodoBiseccion();
 elif Op == '4':
     MetodoSecante();
+elif Op == '5':
+    AproximacionLineal();
 
 
 #Resolver la funcion para saber valor real
