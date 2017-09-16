@@ -197,6 +197,33 @@ def AproximacionLineal():
     print("|--------|--------|")
     for A in range(0,int(len(ValX)/2)):
         print("|---" + ValX[A*2] +  "---|---" + ValX[(A*2)+1] + "---|")
+    sumaVAL(ValX)
+    MuliVAL(ValX)
+    Ala(ValX)
+
+def sumaVAL(Val):
+    SumaX = 0;
+    SumaY = 0;
+    for J in range(0,int(len(Val)/2)):
+        SumaY = int(Val[(J*2)+1]);
+        SumaX = int(Val[J*2]) + SumaX;
+    print("SumaX = " + str(SumaX));
+    print("SumaY = " + str(SumaY));
+
+def MuliVAL(Val):
+    MultVAL = 0;
+    for J in range(0,int(len(Val)/2)):
+        MultVAL = (int(Val[(J*2)]) * int(Val[(J*2)+1]))+MultVAL;
+    print("E X*Y = " + str(MultVAL))
+
+def Ala(Val):
+    XAla = 0;
+    YAla = 0;
+    for J in range(0,int(len(Val)/2)):
+        YAla = (int(Val[((J*2)+1)])*int(Val[((J*2)+1)])) + YAla;
+        XAla = (int(Val[(J*2)])*int(Val[(J*2)])) + XAla;
+    print("E X^2 = " + str(XAla));
+    print("E Y^2 = " + str(YAla));
 
 print("1.) Serie de Taylor")
 print("2.) Metodo de Newton")
