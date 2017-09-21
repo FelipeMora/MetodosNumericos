@@ -1,4 +1,5 @@
 from sympy import *
+import os
 #Pedir al usuario los datos
 Orden=[]
 def SerieTaylor():
@@ -180,23 +181,23 @@ def ErrorAcumulado(Vac,Van):
     return Error
 
 def AproximacionLineal():
+    limpiarCON()
     ValX = []
     print("Cuantos valores ingresara?");
     CantVal = input();
     for i in range(0,int(CantVal)):
-        print("---------------> ",i);
+        limpiarCON()
         print("Ingrese los valores de X");
         InX = input();
         ValX.append(InX)
         print("Ingrese los valores de Y");
         InY = input();
         ValX.append(InY)
-
-    print("|-----------------|")
-    print("|   X    |   Y    |")
-    print("|--------|--------|")
-    for A in range(0,int(len(ValX)/2)):
-        print("|---" + ValX[A*2] +  "---|---" + ValX[(A*2)+1] + "---|")
+        print("|-----------------|")
+        print("|   X    |   Y    |")
+        print("|--------|--------|")
+        for A in range(0,int(len(ValX)/2)):
+            print("|---" + ValX[A*2] +  "---|---" + ValX[(A*2)+1] + "---|")
     SumasVAL = sumaVAL(ValX)
     MutiVAL = MuliVAL(ValX)
     Elevar = Ala(ValX)
@@ -239,6 +240,17 @@ def RegresionCuadratica(CantVAL,SumasVAL,MutiVAL,Elevar):
     print("|--------------------------------------|")
     print("| Y = " + str(A) + " + " + str(B) + "x |")
     print("|--------------------------------------|")
+    predecir(A,B,"R")
+
+def predecir(A,B,P):
+    if P == 'R':
+        print("Ingrese el Y a predecir")
+        Yinput = input()
+        R=((A)+(B)*int(Yinput))
+        print("El valor aproximado de " + Yinput + " es : " + str(R))
+
+def limpiarCON():
+    os.system("cls")
 
 print("1.) Serie de Taylor")
 print("2.) Metodo de Newton")
