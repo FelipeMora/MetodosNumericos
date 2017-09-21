@@ -252,6 +252,10 @@ def predecir(A,B,P):
 def limpiarCON():
     os.system("cls")
 
+
+print("|------------------------------------------|")
+print("| Desarrollado por Felipe Mora Fajardo/CTB |")
+print("|------------------------------------------|")
 print("1.) Serie de Taylor")
 print("2.) Metodo de Newton")
 print("3.) Metodo de Biseccion")
