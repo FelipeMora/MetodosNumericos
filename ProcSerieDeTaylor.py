@@ -1,5 +1,6 @@
 from sympy import *
 import os
+import math
 #Pedir al usuario los datos
 Orden=[]
 def SerieTaylor():
@@ -186,7 +187,6 @@ def AproximacionLineal():
     print("Cuantos valores ingresara?");
     CantVal = input();
     for i in range(0,int(CantVal)):
-        limpiarCON()
         print("Ingrese los valores de X");
         InX = input();
         ValX.append(InX)
@@ -201,6 +201,7 @@ def AproximacionLineal():
     SumasVAL = sumaVAL(ValX)
     MutiVAL = MuliVAL(ValX)
     Elevar = Ala(ValX)
+    CoeCor(CantVal,MutiVAL,SumasVAL,Elevar)
     RegresionCuadratica(CantVal,SumasVAL,MutiVAL,Elevar)
 
 def sumaVAL(Val):
@@ -248,6 +249,23 @@ def predecir(A,B,P):
         Yinput = input()
         R=((A)+(B)*int(Yinput))
         print("El valor aproximado de " + Yinput + " es : " + str(R))
+
+def CoeCor(CantVal,MutiVal,SumasVAL,Elevar):
+    limpiarCON()
+    SumaVAL = []
+    Ala = []
+    SumaVAL = SumasVAL.split(", ")
+    Ala = Elevar.split(", ")
+    Corre=(int(CantVal)*(MutiVal)-int(SumaVAL[0])*int(SumaVAL[1]))/(math.sqrt((int(CantVal)*int(Ala[0]))-int(SumaVAL[0])*int(SumaVAL[0]))*math.sqrt((int(CantVal)*int(Ala[1]))-int(SumaVAL[1])*int(SumaVAL[1])))
+    """R=(int(CantVal)*(MutiVal)-int(SumaVAL[0])*int(SumaVAL[1]))
+    print("R ---> " + str(R))
+    A=math.sqrt((int(CantVal)*int(Ala[0]))-int(SumaVAL[0])*int(SumaVAL[0]))
+    print("A = " + str(A))
+    B=math.sqrt((int(CantVal)*int(Ala[1]))-int(SumaVAL[1])*int(SumaVAL[1]))
+    print("B = " + str(B))
+    C=A*B
+    print("C = " + str(C))"""
+    print(" Coeficiente de Correlación " + str(Corre))
 
 def limpiarCON():
     os.system("cls")
