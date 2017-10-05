@@ -14,7 +14,9 @@ class windows:
         self.LFrame = LabelFrame(master, text="Opciones",padx=10, pady=10)
         self.LFrame.pack(fill="both",expand="yes")
         self.FuncionGET = StringVar()
+        self.createwidgest()
 
+    def createwidgest(self):
         self.LblTexNor = Label(self.LFrame,text="Ingrese la función : ",font=("Agency FB", 14)).place(x=10,y=0)#Text
         self.CmpGET = Entry(self.LFrame,textvariable=self.FuncionGET).place(x=130,y=10)#Campo de entrada
         self.btnGET = Button(self.LFrame,text="Enviar",width=7,cursor="hand1",relief="groove",command=self.derivar).place(x=260,y=5)#Boton con evento
@@ -25,9 +27,6 @@ class windows:
         self.lstDeriv.insert(1, "-2x^3");
         # Termina de agregar
         self.lstDeriv.place(x=10, y=30)
-
-    def createwidgest(self):
-        return "Not this programmed. Better code!!!"
 
     def derivar(self):
         print("The derivate!!!")
