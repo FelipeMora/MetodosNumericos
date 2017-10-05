@@ -1,52 +1,47 @@
 #import sys
 #sys.path.append('C:\Python27\Lib\lib-tk')
 from tkinter import *
-def Derivada():
-    Derivar = FuncionGET.get()
-    Show = "Procesando derivada... "
-    if Derivar == "":
-        Show = "No ha ingresado derivada!"
-    else:
-        VentanaProcDeriv.deiconify()
-        ValReal(Derivar)
-    MosDerivada = Label(ventana,text=Show + Derivar,fg="red",font=("Agency FB",14)).place(x=20,y=60)
 
-def ValReal(Derivar):
-    print("Sacar el valor real de " + Derivar)
-    #Creacion de un nuevo LabelFrame
-    LFrame2 = LabelFrame(ventana, text="Serie de Taylor",padx=10,pady=10,cursor="arrow")
-    LFrame2.pack(fill="both",expand="yes")
-    LFrame2.config(width=50)
-    #Widgets pertenecientes a el LabelFrame
-    lbValRe = Label(LFrame2,text="Valor real: ",font=("Agency FB",14)).place(x=10,y=80)
-    lbValXi = Label(LFrame2,text="Xi = ",font=("Agency FB",14)).place(x=130,y=80)
-    campoGETXi = Entry(LFrame2,textvariable=Xi).place(x=230,y=80)
+class windows:
 
-#Creating windows
-ventana = Tk()
-ventana.geometry("500x600+50+50")
-ventana.title("Métodos Numéricos")
+    def __init__(self, master):
+        self.prin = master
+        self.winProDeri = Toplevel(master)
+        self.winProDeri.title("Derivaciones")
+        self.winProDeri.geometry("400x300+20+20")
+        self.winProDeri.withdraw()
 
-VentanaProcDeriv = Toplevel(ventana)
-VentanaProcDeriv.title("Derivaciones")
-VentanaProcDeriv.geometry("400x300")
-VentanaProcDeriv.withdraw()
+        self.LFrame = LabelFrame(master, text="Opciones",padx=10, pady=10)
+        self.LFrame.pack(fill="both",expand="yes")
+        self.FuncionGET = StringVar()
 
-LFrame = LabelFrame(ventana, text="Opciones",padx=10,pady=10)
-LFrame.pack(fill="both",expand="yes")
+        self.LblTexNor = Label(self.LFrame,text="Ingrese la función : ",font=("Agency FB", 14)).place(x=10,y=0)#Text
+        self.CmpGET = Entry(self.LFrame,textvariable=self.FuncionGET).place(x=130,y=10)#Campo de entrada
+        self.btnGET = Button(self.LFrame,text="Enviar",width=7,cursor="hand1",relief="groove",command=self.derivar).place(x=260,y=5)#Boton con evento
 
-Xi = IntVar()
-FuncionGET = StringVar()
+        self.LblTitleLis = Label(self.winProDeri, text="Derivadas", font=("Agency FB", 14)).place(x=10, y=0)#Label de las derivadas
+        self.lstDeriv = Listbox(self.winProDeri, width=50)#listbox en donde se muestran las derivadas
 
-Etiqueta = Label(LFrame,text="Ingrese la funcion: ",font=("Agency FB",14)).place(x=10,y=0)
-campoGET = Entry(LFrame,textvariable=FuncionGET).place(x=130,y=10)
-botonGETFun = Button(LFrame,text="Enviar",width=7, height=0,cursor="hand1",relief="groove",command=Derivada).place(x=260,y=5)
-#Windows of derived
-LabelTitleLis = Label(VentanaProcDeriv,text="Derivadas",font=("Agency FB",14)).place(x=10,y=0)
-lstDeriv = Listbox(VentanaProcDeriv, width=60)
-#Add to list
-lstDeriv.insert(1,"-2x^3");
-#End of add
-lstDeriv.place(x=10,y=30)
-#Show the windows
-ventana.mainloop();
+        self.lstDeriv.insert(1, "-2x^3");
+        # Termina de agregar
+        self.lstDeriv.place(x=10, y=30)
+
+    def createwidgest(self):
+        return "Not this programmed. Better code!!!"
+
+    def derivar(self):
+        print("The derivate!!!")
+        Derivar = self.FuncionGET.get()
+        text = "Procesando derivada... "
+        if (Derivar == ""):
+            text = "No ha ingresado derivada!"
+        if (text == "Procesando derivada... "):
+            self.winProDeri.deiconify()
+        MosDerivada = Label(self.LFrame, text=text + Derivar, fg="red", font=("Agency FB", 14)).place(x=10, y=60)
+
+
+root = Tk()
+root.geometry("500x600")
+root.title("Métodos Numericos")
+b = windows(root)
+root.mainloop()
