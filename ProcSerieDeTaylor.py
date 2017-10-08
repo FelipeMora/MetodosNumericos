@@ -2,50 +2,124 @@ from sympy import *
 import os
 import math
 #Pedir al usuario los datos
-Orden=[]
-def SerieTaylor():
-    print("ingrese la funcion :")
-    Funcion = input()
-    #Funcion
-    print("Ingrese el Xi")
-    Xi = input()
-    XiResul = Xi
-    #Xi
-    print("Predecir")
-    a = input()
-    print("Desea ingresar grado de la derivada? S/N")
-    op2 = input()
-    if op2 == "S":
-        print("Ingrese el Grado")
-        grad = input()
-        Serie(Funcion,Xi,a,grad)
-    if op2 == "N":
-        Serie(Funcion,Xi,a,"0")
+class metodosyseries:
 
-def Serie(Funcion,Xi,a,Grado):
-    Derivadas=[]
-    Derivadas = Derivada(Funcion,Grado)
-    print(Derivadas)
-    lenDerivadas = len(Derivadas)
-    x=Symbol('x')
-    XiLimp = float(eval(Xi))#1.0466666666666666
-    ALimp = float(eval(a))#0.785
-    OrdenRESULT = 0.0
-    print('|-----------------------------------|')
-    print('|-------|  Serie de Taylor |--------|')
-    print('|___________________________________|')
-    for i in range(0,lenDerivadas-1):
-        if OrdenRESULT == 0.0:
-            FuncionEnA = Derivadas[i].subs('x',ALimp)
-        else:
-            FuncionEnA = OrdenRESULT.subs('x',ALimp)
-        FuncionDev = Derivadas[i+1].subs('x',ALimp)
-        Exp = i +1;
-        FuncionRes = (XiLimp-ALimp)**Exp
-        Fact = factorial(i+1)
-        OrdenRESULT = FuncionEnA+((FuncionDev*(FuncionRes**1))/Fact)
-        print(" | ",i," | ",OrdenRESULT," | ")
-    print('______________________________')
+    def __init__(self, Op):
+        if Op == '1':
+            self.SerieTaylor();
+        elif Op == '2':
+            self.MetodoNewton();
+        elif Op == '3':
+            self.MetodoBiseccion();
+        elif Op == '4':
+            self.MetodoSecante();
+        elif Op == '5':
+            self.AproximacionLineal();
+
+    def SerieTaylor(self):
+        print("ingrese la funcion :")
+        Funcion = input()
+        print("Ingrese el Xi")
+        Xi = input()
+        print("Predecir")
+        a = input()
+        print("Desea ingresar grado de la derivada? S/N")
+        op2 = input()
+        if op2 == "S":
+            print("Ingrese el Grado")
+            grad = input()
+            self.Serie(Funcion, Xi, a, grad)
+        if op2 == "N":
+            self.Serie(Funcion, Xi, a, "0")
+
+    def Serie(self,Funcion,Xi,a,Grado):
+        Derivadas = []
+        Derivadas = Derivada(Funcion, Grado)
+        print(Derivadas)
+        lenDerivadas = len(Derivadas)
+        x = Symbol('x')
+        XiLimp = float(eval(Xi))  # 1.0466666666666666
+        ALimp = float(eval(a))  # 0.785
+        OrdenRESULT = 0.0
+        print('|-----------------------------------|')
+        print('|-------|  Serie de Taylor |--------|')
+        print('|___________________________________|')
+        for i in range(0, lenDerivadas - 1):
+            if OrdenRESULT == 0.0:
+                FuncionEnA = Derivadas[i].subs('x', ALimp)
+            else:
+                FuncionEnA = OrdenRESULT.subs('x', ALimp)
+            FuncionDev = Derivadas[i + 1].subs('x', ALimp)
+            Exp = i + 1;
+            FuncionRes = (XiLimp - ALimp) ** Exp
+            Fact = factorial(i + 1)
+            OrdenRESULT = FuncionEnA + ((FuncionDev * (FuncionRes ** 1)) / Fact)
+            print(" | ", i, " | ", OrdenRESULT, " | ")
+        print('______________________________')
+
+    def Derivada(self,Funcion,grado):
+        Derivada = Funcion
+        Derivadas = []
+        x = Symbol('x')
+        if grado == "0":
+            cadena = Derivada.capitalize()
+            coun = cadena.count("x")
+            Derivadas.insert(0, eval(Funcion))
+            for i in range(1, coun + 1):
+                Derivada = diff(Derivada)
+                Derivadas.insert(i, Derivada)
+        elif grado != "0":
+            Derivadas.insert(0, eval(Funcion))
+            for i in range(1, int(grado) + 1):
+                Derivada = diff(Derivada)
+                Derivadas.insert(i, Derivada)
+        return Derivadas
+
+    def SerieTaylor(self):
+        print("ingrese la funcion :")
+        Funcion = input()
+        # Funcion
+        print("Ingrese el Xi")
+        Xi = input()
+        XiResul = Xi
+        # Xi
+        print("Predecir")
+        a = input()
+        print("Desea ingresar grado de la derivada? S/N")
+        op2 = input()
+        if op2 == "S":
+            print("Ingrese el Grado")
+            grad = input()
+            self.Serie(Funcion, Xi, a, grad)
+        if op2 == "N":
+            self.Serie(Funcion, Xi, a, "0")
+
+    def Serie(self,Funcion,Xi,a,Grado):
+        Derivadas=[]
+        Derivadas = Derivada(Funcion,Grado)
+        print(Derivadas)
+        lenDerivadas = len(Derivadas)
+        x=Symbol('x')
+        XiLimp = float(eval(Xi))#1.0466666666666666
+        ALimp = float(eval(a))#0.785
+        OrdenRESULT = 0.0
+        print('|-----------------------------------|')
+        print('|-------|  Serie de Taylor |--------|')
+        print('|___________________________________|')
+        for i in range(0,lenDerivadas-1):
+            if OrdenRESULT == 0.0:
+                FuncionEnA = Derivadas[i].subs('x',ALimp)
+            else:
+                FuncionEnA = OrdenRESULT.subs('x',ALimp)
+            FuncionDev = Derivadas[i+1].subs('x',ALimp)
+            Exp = i +1;
+            FuncionRes = (XiLimp-ALimp)**Exp
+            Fact = factorial(i+1)
+            OrdenRESULT = FuncionEnA+((FuncionDev*(FuncionRes**1))/Fact)
+            print(" | ",i," | ",OrdenRESULT," | ")
+        print('______________________________')
+
+Orden=[]
 
 def Derivada(Funcion,grado):
     Derivada = Funcion
