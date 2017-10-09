@@ -6,32 +6,34 @@ try:
 except ImportError:
     import tkinter.ttk as ttk
 
-def startGUI():
+def startGUI(title,OpG):
     global WI,H
-    WI = "593"
-    H = "460"
+    WI = "800"#593
+    H = "600"#460
     root = Tk()
     root.geometry(WI+"x"+H+"+481+153")
-    root.title("Métodos Numericos")
-    b = windows(root)
+    root.title(title)
+    b = windows(root,OpG)
     root.mainloop()
 
 class windows:
 
-    def __init__(self, master):
+    def __init__(self, master, op):
         self.prin = master
         self.exito = 0
         self.FuncionGET = StringVar()  # No debe ir aca
-        self.top_derivate=self.createTop_Level("Derivaciones")#Creacion de un Top Level
-        # Widgeste del Frame principal
-        self.LabelPrin = self.createLabelF(self.prin, "Principal", 10, 10)
-        self.createwidgest()
+        self.top_derivate=self.createTop_Level("Derivaciones")#Creacion de un Top Level -----> No pertence a principal
+        self.createwidgest()#Debe recibir un parametro para basarse en el y agregar la GUI
 
-    def createMenu(self):
+    def createMenu(self):# ---> Pertenece a todas las opciones
         menu = Menu(self.prin)
         menu.configure(relief=GROOVE)
         menu.configure(borderwidth="10")
         self.prin.config(menu=menu)
+        subMenuPrin = self.createSubMenu(menu, "Aproximación basicas", "Polinomio de Mclaurin/Taylor", self.Op1)
+        subMenuPrin2 = self.createSubMenu(menu, "Sistema de Numeración posicional", "", self.Op2)
+        subMenuPrin3 = self.createSubMenu(menu, "Fracciones Binarias", "", self.Op3)
+        subMenuPrin4 = self.createSubMenu(menu, "Interpolacion", "Metodo de Newton", self.Op4)
         return menu
 
     def createSubMenu(self,MenuTO,title,subs,Gcommand):#Prueba de los menus y submenus ----> No se encuentra finalizado
@@ -69,6 +71,8 @@ class windows:
 
     def Op1(self):
         self.insertLisBox(self.listbox, "Polinomio de Mclaurin/Taylor", LEFT, "cls")
+        self.prin.destroy()
+        startGUI("Aproximacion Basicas","Op1")
         #Polinimio de Mclaurin/Taylor
     def Op2(self):
         self.insertLisBox(self.listbox, "Sistema de Numeracion posicional", LEFT, "cls")
@@ -88,13 +92,9 @@ class windows:
         return TopLevel
 
     def createwidgest(self):
+        self.LabelPrin = self.createLabelF(self.prin, "Principal", 10, 10)
         MenuPrin = self.createMenu()  # Creacion del menu principal
-        #Creando submenus
-        subMenuPrin = self.createSubMenu(MenuPrin, "Aproximación basicas","Polinomio de Mclaurin/Taylor",self.Op1)
-        subMenuPrin2 = self.createSubMenu(MenuPrin, "Sistema de Numeración posicional", "",self.Op2)
-        subMenuPrin3 = self.createSubMenu(MenuPrin, "Fracciones Binarias", "",self.Op3)
-        subMenuPrin4 = self.createSubMenu(MenuPrin, "Interpolacion","Metodo de Newton",self.Op4)
-        self.createConsole()
+        self.createConsole() # Todas las Op tendran una consola
         Label1 = self.createLabel(self.LabelPrin, "Función", 10, 0)
         #self.addListWidPrin(Label1)
         EntryFun = self.createEntry(self.LabelPrin, self.FuncionGET, 130, 10)
@@ -185,4 +185,4 @@ class windows:
         self.insertLisBox(self.listbox, text, LEFT, "cls")
 
 if __name__ == '__main__':
-    startGUI()
+    startGUI("Métodos Numéricos","Prin")
