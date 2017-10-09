@@ -23,6 +23,8 @@ class windows:
         self.exito = 0
         self.FuncionGET = StringVar()  # No debe ir aca
         self.top_derivate=self.createTop_Level("Derivaciones")#Creacion de un Top Level
+        # Widgeste del Frame principal
+        self.LabelPrin = self.createLabelF(self.prin, "Principal", 10, 10)
         self.createwidgest()
 
     def createMenu(self):
@@ -32,13 +34,13 @@ class windows:
         self.prin.config(menu=menu)
         return menu
 
-    def createSubMenu(self,MenuTO,title,subs):#Prueba de los menus y submenus ----> No se encuentra finalizado
+    def createSubMenu(self,MenuTO,title,subs,Gcommand):#Prueba de los menus y submenus ----> No se encuentra finalizado
         subMenu = Menu(MenuTO)
         if subs == "":
-            MenuTO.add_command(label=title,command=self.nada)
+            MenuTO.add_command(label=title,command=Gcommand)
         else:
             MenuTO.add_cascade(label=title,menu=subMenu)
-            subMenu.add_command(label=subs,command=self.nada)
+            subMenu.add_command(label=subs,command=Gcommand)
         #subMenu.add_separator()
         #subMenu.add_command(label="Metodo de Biseccion",command=self.nada)
         return subMenu
@@ -62,8 +64,21 @@ class windows:
         #FrameConsole = self.createFrame(self.prin, W, 50, BOTTOM, 10, 0, 0)
 
     def nada(self):
-        text = "Hola!! No hago nada, solo estoy para pruebas."
+        text = "Hola!! No hago nada, solo estoy para pruebas." #Debe destruir todo lo que este adentro del  Labelprincipal
         self.insertLisBox(self.listbox, text, LEFT, "cls")
+
+    def Op1(self):
+        self.insertLisBox(self.listbox, "Polinomio de Mclaurin/Taylor", LEFT, "cls")
+        #Polinimio de Mclaurin/Taylor
+    def Op2(self):
+        self.insertLisBox(self.listbox, "Sistema de Numeracion posicional", LEFT, "cls")
+        #Sistema de Numeracion posicional
+    def Op3(self):
+        self.insertLisBox(self.listbox, "Fracciones binarias", LEFT, "cls")
+        #Fracciones binarias
+    def Op4(self):
+        self.insertLisBox(self.listbox, "Metodo de Newton", LEFT, "cls")
+        #Metodo de Newton
 
     def createTop_Level(self,title="Default",geometry="400x300+20+20"):#Todas deberian retornar para agregar a cualquier varibale
         TopLevel = Toplevel(self.prin)
@@ -75,16 +90,17 @@ class windows:
     def createwidgest(self):
         MenuPrin = self.createMenu()  # Creacion del menu principal
         #Creando submenus
-        subMenuPrin = self.createSubMenu(MenuPrin, "Aproximación basicas","Polinomio de Mclaurin/Taylor")
-        subMenuPrin2 = self.createSubMenu(MenuPrin, "Sistema de Numeración posicional", "")
-        subMenuPrin3 = self.createSubMenu(MenuPrin, "Fracciones Binarias", "")
-        subMenuPrin4 = self.createSubMenu(MenuPrin, "Interpolacion","Metodo de Newton (Espacios equidistantes)")
+        subMenuPrin = self.createSubMenu(MenuPrin, "Aproximación basicas","Polinomio de Mclaurin/Taylor",self.Op1)
+        subMenuPrin2 = self.createSubMenu(MenuPrin, "Sistema de Numeración posicional", "",self.Op2)
+        subMenuPrin3 = self.createSubMenu(MenuPrin, "Fracciones Binarias", "",self.Op3)
+        subMenuPrin4 = self.createSubMenu(MenuPrin, "Interpolacion","Metodo de Newton",self.Op4)
         self.createConsole()
-        #Widgeste del Frame principal
-        LabelPrin = self.createLabelF(self.prin,"Opciones",10,10)
-        Label1 = self.createLabel(LabelPrin, "Función", 10, 0)
-        EntryFun = self.createEntry(LabelPrin, self.FuncionGET, 130, 10)
-        btnSTART = self.createButton(LabelPrin, text="Empezar", cursor="hand1", Grelief="groove", command=self.derivar, xc=260, yc=5)
+        Label1 = self.createLabel(self.LabelPrin, "Función", 10, 0)
+        #self.addListWidPrin(Label1)
+        EntryFun = self.createEntry(self.LabelPrin, self.FuncionGET, 130, 10)
+        #self.addListWidPrin(EntryFun)
+        btnSTART = self.createButton(self.LabelPrin, text="Empezar", cursor="hand1", Grelief="groove", command=self.derivar, xc=260, yc=5)
+        #self.addListWidPrin(btnSTART)
         Label2 = self.createLabel(self.top_derivate, text="Derivadas", xc=10, yc=0)
         ListDeriv = self.createLisBox(self.top_derivate,15,63,NONE,NONE)
         self.insertLisBox(self.listbox,"Consola creada", LEFT,"cls")
@@ -146,6 +162,7 @@ class windows:
             agregar = time.strftime("%c") + " >> "
             # -----> for item in ["one", "two", "three", "four"]:
         Contenedor.insert(END, agregar + item)
+        Contenedor.see(END)
         Contenedor.pack(side=Gside)
 
     def ShowTop_level(self,top_level):
@@ -156,7 +173,7 @@ class windows:
         try:
             widget.destroy()
         except ImportWarning:
-            print("El widget no pudo ser destruido")
+            self.insertLisBox(self.listbox, "El objeto no puedo ser destruido - ERROR -", LEFT, "cls")
 
     def derivar(self):
         Derivar = self.FuncionGET.get()
