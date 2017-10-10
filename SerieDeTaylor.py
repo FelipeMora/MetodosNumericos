@@ -1,35 +1,38 @@
 from tkinter import *
 from tkinter.tix import ScrolledListBox
 import time
+from typing import Any
+
 try:
     import ttk
 except ImportError:
     import tkinter.ttk as ttk
 
-def startGUI(title,OpG):
+def startGUI(title,OpG,sg):
     global WI,H
-    WI = "800"#593
-    H = "600"#460
+    WI = "879"#593
+    H = "680"#460
     root = Tk()
-    root.geometry(WI+"x"+H+"+481+153")
+    root.geometry(WI+"x"+H+"+379+66")
     root.title(title)
-    b = windows(root,OpG)
+    b = windows(root,OpG,sg)
     root.mainloop()
 
 class windows:
 
-    def __init__(self, master, op):
+    def __init__(self, master, op,sg):
         self.prin = master
-        self.exito = 0
+        self.logoCTB = PhotoImage(file="img\ctb.png")
         self.FuncionGET = StringVar()  # No debe ir aca
-        self.top_derivate=self.createTop_Level("Derivaciones")#Creacion de un Top Level -----> No pertence a principal
-        self.createwidgest()#Debe recibir un parametro para basarse en el y agregar la GUI
+        #self.top_derivate=self.createTop_Level("Derivaciones")#Creacion de un Top Level -----> No pertence a principal
+        self.createwidgest(op,sg)#Debe recibir un parametro para basarse en el y agregar la GUI
 
     def createMenu(self):# ---> Pertenece a todas las opciones
         menu = Menu(self.prin)
         menu.configure(relief=GROOVE)
         menu.configure(borderwidth="10")
         self.prin.config(menu=menu)
+        subMenuPrin0 = self.createSubMenu(menu, "Principal","", self.Op0)
         subMenuPrin = self.createSubMenu(menu, "Aproximación basicas", "Polinomio de Mclaurin/Taylor", self.Op1)
         subMenuPrin2 = self.createSubMenu(menu, "Sistema de Numeración posicional", "", self.Op2)
         subMenuPrin3 = self.createSubMenu(menu, "Fracciones Binarias", "", self.Op3)
@@ -69,52 +72,110 @@ class windows:
         text = "Hola!! No hago nada, solo estoy para pruebas." #Debe destruir todo lo que este adentro del  Labelprincipal
         self.insertLisBox(self.listbox, text, LEFT, "cls")
 
+    def Op0(self):
+        self.prin.destroy()
+        startGUI("Métodos Numéricos", "Prin","Principal")
+
     def Op1(self):
         self.insertLisBox(self.listbox, "Polinomio de Mclaurin/Taylor", LEFT, "cls")
         self.prin.destroy()
-        startGUI("Aproximacion Basicas","Op1")
+        startGUI("Métodos Numéricos","Op1","Aproximaciones Basicas")
         #Polinimio de Mclaurin/Taylor
+
     def Op2(self):
         self.insertLisBox(self.listbox, "Sistema de Numeracion posicional", LEFT, "cls")
+        self.prin.destroy()
+        startGUI("Métodos Numéricos", "Op1", "Aproximaciones Basicas")
         #Sistema de Numeracion posicional
+
     def Op3(self):
         self.insertLisBox(self.listbox, "Fracciones binarias", LEFT, "cls")
         #Fracciones binarias
+
     def Op4(self):
         self.insertLisBox(self.listbox, "Metodo de Newton", LEFT, "cls")
         #Metodo de Newton
 
-    def createTop_Level(self,title="Default",geometry="400x300+20+20"):#Todas deberian retornar para agregar a cualquier varibale
+    def createTop_Level(self,title="Default",geometry="400x300+20+20"):
         TopLevel = Toplevel(self.prin)
         TopLevel.title(title)
         TopLevel.geometry(geometry)
         TopLevel.withdraw()
         return TopLevel
 
-    def createwidgest(self):
-        self.LabelPrin = self.createLabelF(self.prin, "Principal", 10, 10)
+    def catalogacion(self,arg):
+        switcher = {
+            'Prin': self.createGUIPrin,
+            'Op1': self.createGUIAprox,
+            'Op2': "dos",
+            'Op3': "dos",
+            'Op4': "dos",
+        }
+        return switcher.get(arg,"nothing")
+
+    def createGUIPrin(self):
+        self.insertLisBox(self.listbox, "Cargando widgest principales...", LEFT, "cls")
+        MsgIntro = self.createMessage(self.prin,'''Métodos Numéricos
+
+Metodologias que utilizan operaciones algebraicas
+y aritmeticas para resolver de forma aproximada 
+ecuaciones complejas, en muchos de ellos es requerido
+aplicar derivadas, integrales y ecuaciones diferenciales''',370,80,210)
+        MsgNote = self.createMessage(self.prin,'''Notas
+
+Este software no sera desarrollado bajo ninguna metodologia
+en especial, ni tampoco se le aplicara un plan de pruebas
+estructurado. Por tal motivo, es posible que contenga una
+cantidad produente de errores.''',370,460,210)
+        FraSeparador = self.createFrame(self.prin,5,125,NONE,10,0,0,430,210)
+        self.configFrameDefault(FraSeparador,SUNKEN)
+        #LabeIMG = self.createFrame(self.prin,145,115,NONE,0,0,0,80,60)
+        LabeIMG = self.createLabel(self.prin,"",60,25,NONE)
+        FraSeparador2 = self.createFrame(self.prin,745,5,0,0,0,0,70,360)
+        self.configFrameDefault(FraSeparador2,RIDGE)
+        self.insertLisBox(self.listbox, "GUI principal cargada con exito!!!", LEFT, "cls")
+
+    def configFrameDefault(self,Contenedor,grelief):
+        Contenedor.configure(relief=grelief)
+        Contenedor.configure(borderwidth="2")
+        #Contenedor.configure(background="#d9d9d9")
+
+    def createGUIAprox(self):
+        Label1 = self.createLabel(self.LabelPrin, "Función", 10, 0)
+        # self.addListWidPrin(Label1)
+        EntryFun = self.createEntry(self.LabelPrin, self.FuncionGET, 130, 10)
+        # self.addListWidPrin(EntryFun)
+        btnSTART = self.createButton(self.LabelPrin, text="Empezar", cursor="hand1", Grelief="groove",command=self.derivar, xc=260, yc=5)
+        # self.addListWidPrin(btnSTART)
+        self.top_derivate = self.createTop_Level("Derivaciones")
+        Label2 = self.createLabel(self.top_derivate, text="Derivadas", xc=10, yc=0)
+        ListDeriv = self.createLisBox(self.top_derivate, 15, 63, NONE, NONE)
+        self.insertLisBox(ListDeriv, "-2x^3", LEFT, "")
+        ListDeriv.place(x=10, y=30)
+
+    def createwidgest(self,op,sg):
+        self.LabelPrin = self.createLabelF(self.prin, sg, 10, 10)
         MenuPrin = self.createMenu()  # Creacion del menu principal
         self.createConsole() # Todas las Op tendran una consola
-        Label1 = self.createLabel(self.LabelPrin, "Función", 10, 0)
-        #self.addListWidPrin(Label1)
-        EntryFun = self.createEntry(self.LabelPrin, self.FuncionGET, 130, 10)
-        #self.addListWidPrin(EntryFun)
-        btnSTART = self.createButton(self.LabelPrin, text="Empezar", cursor="hand1", Grelief="groove", command=self.derivar, xc=260, yc=5)
-        #self.addListWidPrin(btnSTART)
-        Label2 = self.createLabel(self.top_derivate, text="Derivadas", xc=10, yc=0)
-        ListDeriv = self.createLisBox(self.top_derivate,15,63,NONE,NONE)
-        self.insertLisBox(self.listbox,"Consola creada", LEFT,"cls")
-        self.insertLisBox(ListDeriv,"-2x^3",LEFT,"")
-        ListDeriv.place(x=10, y=30)
+        self.insertLisBox(self.listbox, "Consola creada", LEFT, "cls")
+        #Pertenece
+        fun = self.catalogacion(op)
+        fun()
+
+    def createMessage(self,Contenedor,text,gw,gx,gy):
+        Msg = Message(Contenedor,width=gw)
+        Msg.place(x=gx,y=gy)
+        Msg.configure(text=text)
 
     def createScroll(self,Contenedor,Gorient):
         scrollbar = Scrollbar(Contenedor,orient=Gorient)
         return scrollbar
 
-    def createFrame(self,Contenedor,Gwidth,Gheight,side,gpadx,gpady,pack):
+    def createFrame(self,Contenedor,Gwidth,Gheight,side,gpadx,gpady,pack,gx,gy):
         print("Creando Frame")
         if pack == 0:
-            default = Frame(Contenedor,width=Gwidth,height=Gheight,padx=gpadx,pady=gpady)
+            default = Frame(Contenedor,width=Gwidth,height=Gheight)
+            default.place(x=gx,y=gy)
         else:
             default = Frame(Contenedor, width=Gwidth, height=Gheight, padx=gpadx, pady=gpady)
             default.pack(side=side, padx=gpadx, pady=gpady)
@@ -129,7 +190,13 @@ class windows:
     def createLabel(self,Contenedor,text="Default",xc = 0,yc= 0,side=NONE):
         print("Crea label")
         if xc >= 0 and yc >= 0:
-            LblTexNor = Label(Contenedor, text=text + " : ", font=("Agency FB", 14)).place(x=xc,y=yc)
+            if text!="":
+                LblTexNor = Label(Contenedor, text=text + " : ", font=("Agency FB", 14)).place(x=xc,y=yc)
+            else:
+                try:
+                    LblTexNor = Label(Contenedor,image=self.logoCTB).place(x=xc,y=yc)
+                except ImportWarning:
+                    self.insertLisBox(self.listbox, "No se ha podido cargar la imagen, es posible que la imagen no se encuentre en la ruta por defecto!!!", LEFT, "cls")
         else:
             LblTexNor = Label(Contenedor, text=text, font=("Agency FB", 9)).pack(side=side)
         return LblTexNor
@@ -185,4 +252,4 @@ class windows:
         self.insertLisBox(self.listbox, text, LEFT, "cls")
 
 if __name__ == '__main__':
-    startGUI("Métodos Numéricos","Prin")
+    startGUI("Métodos Numéricos V.0.0.1","Prin","Principal")
