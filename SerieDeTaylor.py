@@ -23,7 +23,6 @@ class windows:
     def __init__(self, master, op,sg):
         self.prin = master
         self.logoCTB = PhotoImage(file="img\ctb.png")
-        self.FuncionGET = StringVar()  # No debe ir aca
         #self.top_derivate=self.createTop_Level("Derivaciones")#Creacion de un Top Level -----> No pertence a principal
         self.createwidgest(op,sg)#Debe recibir un parametro para basarse en el y agregar la GUI
 
@@ -141,17 +140,42 @@ cantidad produente de errores.''',370,460,210)
         #Contenedor.configure(background="#d9d9d9")
 
     def createGUIAprox(self):
-        Label1 = self.createLabel(self.LabelPrin, "Función", 10, 0)
-        # self.addListWidPrin(Label1)
-        EntryFun = self.createEntry(self.LabelPrin, self.FuncionGET, 130, 10)
-        # self.addListWidPrin(EntryFun)
-        btnSTART = self.createButton(self.LabelPrin, text="Empezar", cursor="hand1", Grelief="groove",command=self.derivar, xc=260, yc=5)
-        # self.addListWidPrin(btnSTART)
+        self.insertLisBox(self.listbox, "Cargando widgest...", LEFT, "cls")
+        self.FuncionGET = StringVar()
+        self.Xget = StringVar()
+        self.EABSget = IntVar()
+        self.ERELget = IntVar()
+        labelText = self.createLabel(self.LabelPrin,"F(X)",70,30)
+        labelText1 = self.createLabel(self.LabelPrin,"Grado ",70,80)
+        labelText2 = self.createLabel(self.LabelPrin,"X ",200,80)
+
+        EntryFun = self.createEntry(self.LabelPrin, self.FuncionGET, 140, 30)
+        EntryX = self.createEntry(self.LabelPrin,self.Xget,230,80,0.04)
+
+        spnGrado = self.createSpinbox(self.LabelPrin,1,50,140,80,0.04)
+
+        btnSTART = self.createButton(self.prin,"Empezar","hand1",RAISED,self.derivar,350,55)
+        btnSTART.configure(width=27)
+
+        btnCHKeABS = self.createCheckBTN(self.prin,"Error absoluto",self.EABSget,350,105)
+        btnCHKeREL = self.createCheckBTN(self.prin,"Error relativo",self.ERELget,460,105)
+
+        FraSeparador = self.createFrame(self.prin,5,115,NONE,0,0,0,590,30)
+        self.configFrameDefault(FraSeparador, SUNKEN)
+
+        msgDES = self.createMessage(self.prin,'''La aproximación sera realizada con el metodo de mclaurin y taylor, en el proceso, sera mostrada la grafica correspondiente a la funcion registrada.''',180,620,30)
+
+        FraSeparador2 = self.createFrame(self.prin,745,5,NONE,0,0,0,60,170)
+        self.configFrameDefault(FraSeparador2,RIDGE)
+
+        cnvCNYPrin = self.createCanvas(self.prin,RIDGE,746,60,190)# Debe agregarse un scroll
+
         self.top_derivate = self.createTop_Level("Derivaciones")
         Label2 = self.createLabel(self.top_derivate, text="Derivadas", xc=10, yc=0)
         ListDeriv = self.createLisBox(self.top_derivate, 15, 63, NONE, NONE)
         self.insertLisBox(ListDeriv, "-2x^3", LEFT, "")
         ListDeriv.place(x=10, y=30)
+        self.insertLisBox(self.listbox, "GUI cargada correctamente!!!", LEFT, "cls")
 
     def createwidgest(self,op,sg):
         self.LabelPrin = self.createLabelF(self.prin, sg, 10, 10)
@@ -161,6 +185,22 @@ cantidad produente de errores.''',370,460,210)
         #Pertenece
         fun = self.catalogacion(op)
         fun()
+
+    def createSpinbox(self,Contenedor,desde,hasta,gx,gy,grw):
+        spinbox = Spinbox(Contenedor,from_=desde,to=hasta)
+        spinbox.place(x=gx,y=gy,relwidth=grw)
+        return spinbox
+
+    def createCheckBTN(self,Contenedor,text,v,gx,gy):
+        checkBTN = Checkbutton(Contenedor,text=text,variable=v,onvalue=1,offvalue=0)
+        checkBTN.place(x=gx,y=gy)#Aun no devuelve
+
+    def createCanvas(self,Contenedor,grelief,gw,gx,gy):
+        cnv = Canvas(Contenedor,width=gw)
+        cnv.configure(background="white")
+        cnv.configure(relief=RIDGE)
+        cnv.configure(borderwidth="2")
+        cnv.place(x=gx,y=gy)
 
     def createMessage(self,Contenedor,text,gw,gx,gy):
         Msg = Message(Contenedor,width=gw)
@@ -191,19 +231,22 @@ cantidad produente de errores.''',370,460,210)
         print("Crea label")
         if xc >= 0 and yc >= 0:
             if text!="":
-                LblTexNor = Label(Contenedor, text=text + " : ", font=("Agency FB", 14)).place(x=xc,y=yc)
+                LblTexNor = Label(Contenedor, text=text + " = ").place(x=xc,y=yc)
             else:
                 try:
                     LblTexNor = Label(Contenedor,image=self.logoCTB).place(x=xc,y=yc)
                 except ImportWarning:
                     self.insertLisBox(self.listbox, "No se ha podido cargar la imagen, es posible que la imagen no se encuentre en la ruta por defecto!!!", LEFT, "cls")
         else:
-            LblTexNor = Label(Contenedor, text=text, font=("Agency FB", 9)).pack(side=side)
+            LblTexNor = Label(Contenedor, text=text).pack(side=side)
         return LblTexNor
 
-    def createEntry(self, Contenedor, command=StringVar, xc=0, yc= 0):
+    def createEntry(self, Contenedor, command=StringVar, xc=0, yc= 0,grw=NONE):
         print("Crea entry")
-        CmpGET = Entry(Contenedor, textvariable=command).place(x=xc,y=yc)  #Campo de entrada
+        if grw == NONE:
+            CmpGET = Entry(Contenedor, textvariable=command).place(x=xc,y=yc)  #Campo de entrada
+        else:
+            CmpGET = Entry(Contenedor,textvariable=command).place(x=xc,y=yc,relwidth=grw)
         return CmpGET
 
     def createButton(self,Contenedor,text="Default",cursor="hand1",Grelief="groove",command=StringVar,xc = 0,yc = 0):
