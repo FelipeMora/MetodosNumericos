@@ -15,6 +15,7 @@ def startGUI(title,OpG,sg):
     root = Tk()
     root.geometry(WI+"x"+H+"+379+66")
     root.title(title)
+    root.resizable(width=FALSE,height=FALSE)
     b = windows(root,OpG,sg)
     root.mainloop()
 
@@ -23,8 +24,7 @@ class windows:
     def __init__(self, master, op,sg):
         self.prin = master
         self.logoCTB = PhotoImage(file="img\ctb.png")
-        #self.top_derivate=self.createTop_Level("Derivaciones")#Creacion de un Top Level -----> No pertence a principal
-        self.createwidgest(op,sg)#Debe recibir un parametro para basarse en el y agregar la GUI
+        self.createwidgest(op,sg)
 
     def createMenu(self):# ---> Pertenece a todas las opciones
         menu = Menu(self.prin)
@@ -126,11 +126,11 @@ Este software no sera desarrollado bajo ninguna metodologia
 en especial, ni tampoco se le aplicara un plan de pruebas
 estructurado. Por tal motivo, es posible que contenga una
 cantidad produente de errores.''',370,460,210)
-        FraSeparador = self.createFrame(self.prin,5,125,NONE,10,0,0,430,210)
+        FraSeparador = self.createFrame(self.prin,5,125,NONE,10,0,0,430,210,0)
         self.configFrameDefault(FraSeparador,SUNKEN)
         #LabeIMG = self.createFrame(self.prin,145,115,NONE,0,0,0,80,60)
         LabeIMG = self.createLabel(self.prin,"",60,25,NONE)
-        FraSeparador2 = self.createFrame(self.prin,745,5,0,0,0,0,70,360)
+        FraSeparador2 = self.createFrame(self.prin,745,5,0,0,0,0,70,360,0)
         self.configFrameDefault(FraSeparador2,RIDGE)
         self.insertLisBox(self.listbox, "GUI principal cargada con exito!!!", LEFT, "cls")
 
@@ -145,37 +145,71 @@ cantidad produente de errores.''',370,460,210)
         self.Xget = StringVar()
         self.EABSget = IntVar()
         self.ERELget = IntVar()
-        labelText = self.createLabel(self.LabelPrin,"F(X)",70,30)
-        labelText1 = self.createLabel(self.LabelPrin,"Grado ",70,80)
-        labelText2 = self.createLabel(self.LabelPrin,"X ",200,80)
+        self.createLabel(self.LabelPrin,"F(X)",70,30)
+        self.createLabel(self.LabelPrin,"Grado ",70,80)
+        self.createLabel(self.LabelPrin,"X ",200,80)
 
-        EntryFun = self.createEntry(self.LabelPrin, self.FuncionGET, 140, 30)
-        EntryX = self.createEntry(self.LabelPrin,self.Xget,230,80,0.04)
-
-        spnGrado = self.createSpinbox(self.LabelPrin,1,50,140,80,0.04)
+        self.createEntry(self.LabelPrin, self.FuncionGET, 140, 30)
+        self.createEntry(self.LabelPrin,self.Xget,230,80,0.04)
+        self.createSpinbox(self.LabelPrin,1,50,140,80,0.04)
 
         btnSTART = self.createButton(self.prin,"Empezar","hand1",RAISED,self.derivar,350,55)
         btnSTART.configure(width=27)
 
-        btnCHKeABS = self.createCheckBTN(self.prin,"Error absoluto",self.EABSget,350,105)
-        btnCHKeREL = self.createCheckBTN(self.prin,"Error relativo",self.ERELget,460,105)
+        self.createCheckBTN(self.prin,"Error absoluto",self.EABSget,350,105)
+        self.createCheckBTN(self.prin,"Error relativo",self.ERELget,460,105)
 
-        FraSeparador = self.createFrame(self.prin,5,115,NONE,0,0,0,590,30)
+        FraSeparador = self.createFrame(self.prin,5,115,NONE,0,0,0,590,30,0)
         self.configFrameDefault(FraSeparador, SUNKEN)
 
-        msgDES = self.createMessage(self.prin,'''La aproximación sera realizada con el metodo de mclaurin y taylor, en el proceso, sera mostrada la grafica correspondiente a la funcion registrada.''',180,620,30)
+        self.createMessage(self.prin,'''La aproximación sera realizada con el metodo de mclaurin y taylor, en el proceso, sera mostrada la grafica correspondiente a la funcion registrada.''',180,620,30)
 
-        FraSeparador2 = self.createFrame(self.prin,745,5,NONE,0,0,0,60,170)
+        FraSeparador2 = self.createFrame(self.prin,745,5,NONE,0,0,0,60,170,0)
         self.configFrameDefault(FraSeparador2,RIDGE)
+        #------------------------------------------------------------> SCROLL V.3
+        frame_gen = Frame(self.prin,relief=RIDGE,borderwidth="1")
+        scrollbarView = Scrollbar(frame_gen,orient=VERTICAL,takefocus=FALSE)
+        textView = Text(frame_gen, wrap=WORD, width=91, highlightthickness=0)
 
-        cnvCNYPrin = self.createCanvas(self.prin,RIDGE,746,60,190)# Debe agregarse un scroll
+        FraProc = self.createFrame(textView, 745, 600, NONE, 0, 0, 0, 60, 190, 0)
+        lstDevA = self.createLisBox(FraProc, 15, 15, NONE, NONE)
+        lstDevA.place(x=20, y=20)
+        self.createText(FraProc, 140, 20, 95, 1, DISABLED)
+        self.createLabel(FraProc, "Aproximación", 140, 80, NONE)
+        self.createText(FraProc, 240, 80, 78, 1, DISABLED)
+        self.createMessage(FraProc, "Polinomio de Mclaurin/Taylor", 240, 340, 195)
+        self.createMessage(FraProc, "assfdfdfdfdf", 240, 340, 450)
+        textView.window_create(INSERT,window=FraProc)
 
+        scrollbarView.config(command=textView.yview)
+        #textView.bind('<Configure>', self.defRegion(textView))
+        textView.config(yscrollcommand=scrollbarView.set)
+        scrollbarView.pack(side=RIGHT, fill=Y)
+        #frame.place(side=LEFT,expand=TRUE,fill=BOTH)
+        textView.pack(side=LEFT, expand=True, fill=BOTH)
+        frame_gen.place(x=60, y=190)
+        #------------------------------------------------------------> SCROLL V.3
         self.top_derivate = self.createTop_Level("Derivaciones")
         Label2 = self.createLabel(self.top_derivate, text="Derivadas", xc=10, yc=0)
         ListDeriv = self.createLisBox(self.top_derivate, 15, 63, NONE, NONE)
         self.insertLisBox(ListDeriv, "-2x^3", LEFT, "")
         ListDeriv.place(x=10, y=30)
         self.insertLisBox(self.listbox, "GUI cargada correctamente!!!", LEFT, "cls")
+
+    def defRegion(self,event):
+        event.configure(scrollregion=event.bbox(ALL))
+
+    def createText(self,Contenedor,gw,gy,gW,gH,gstate):
+        textgen = Text(Contenedor,background="white",foreground="black",width=gW,height=gH,state=gstate)
+        textgen.configure(font="TkTextFont")
+        textgen.configure(highlightbackground="#d9d9d9")
+        textgen.configure(highlightcolor="black")
+        textgen.configure(insertbackground="black")
+        textgen.configure(selectbackground="#c4c4c4")
+        textgen.configure(selectforeground="black")
+        textgen.configure(undo="1")
+        textgen.configure(wrap=WORD)
+        textgen.place(x=gw,y=gy)
 
     def createwidgest(self,op,sg):
         self.LabelPrin = self.createLabelF(self.prin, sg, 10, 10)
@@ -195,12 +229,12 @@ cantidad produente de errores.''',370,460,210)
         checkBTN = Checkbutton(Contenedor,text=text,variable=v,onvalue=1,offvalue=0)
         checkBTN.place(x=gx,y=gy)#Aun no devuelve
 
-    def createCanvas(self,Contenedor,grelief,gw,gx,gy):
+    def createCanvas(self,Contenedor,grelief,gw):
         cnv = Canvas(Contenedor,width=gw)
         cnv.configure(background="white")
-        cnv.configure(relief=RIDGE)
+        cnv.configure(relief=grelief)
         cnv.configure(borderwidth="2")
-        cnv.place(x=gx,y=gy)
+        return cnv
 
     def createMessage(self,Contenedor,text,gw,gx,gy):
         Msg = Message(Contenedor,width=gw)
@@ -208,14 +242,15 @@ cantidad produente de errores.''',370,460,210)
         Msg.configure(text=text)
 
     def createScroll(self,Contenedor,Gorient):
-        scrollbar = Scrollbar(Contenedor,orient=Gorient)
+        scrollbar = Scrollbar(Contenedor,orient=Gorient)#orient=Gorient
         return scrollbar
 
-    def createFrame(self,Contenedor,Gwidth,Gheight,side,gpadx,gpady,pack,gx,gy):
+    def createFrame(self,Contenedor,Gwidth,Gheight,side,gpadx,gpady,pack,gx,gy,placepre):
         print("Creando Frame")
         if pack == 0:
             default = Frame(Contenedor,width=Gwidth,height=Gheight)
-            default.place(x=gx,y=gy)
+            if placepre == 0:
+                default.place(x=gx, y=gy)
         else:
             default = Frame(Contenedor, width=Gwidth, height=Gheight, padx=gpadx, pady=gpady)
             default.pack(side=side, padx=gpadx, pady=gpady)
