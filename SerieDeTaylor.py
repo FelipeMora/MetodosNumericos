@@ -1,7 +1,6 @@
 from tkinter import *
-from tkinter.tix import ScrolledListBox
 import time
-from typing import Any
+import ProcSerieDeTaylor
 
 try:
     import ttk
@@ -16,12 +15,16 @@ def startGUI(title,OpG,sg):
     root.geometry(WI+"x"+H+"+379+66")
     root.title(title)
     root.resizable(width=FALSE,height=FALSE)
-    b = windows(root,OpG,sg)
+    windows(root,OpG,sg)
     root.mainloop()
 
 class windows:
 
     def __init__(self, master, op,sg):
+        self.ERELget = IntVar()
+        self.EABSget = IntVar()
+        self.Xget = StringVar()
+        self.FuncionGET = StringVar()
         self.prin = master
         self.logoCTB = PhotoImage(file="img\ctb.png")
         self.createwidgest(op,sg)
@@ -31,11 +34,11 @@ class windows:
         menu.configure(relief=GROOVE)
         menu.configure(borderwidth="10")
         self.prin.config(menu=menu)
-        subMenuPrin0 = self.createSubMenu(menu, "Principal","", self.Op0)
-        subMenuPrin = self.createSubMenu(menu, "Aproximación basicas", "Polinomio de Mclaurin/Taylor", self.Op1)
-        subMenuPrin2 = self.createSubMenu(menu, "Sistema de Numeración posicional", "", self.Op2)
-        subMenuPrin3 = self.createSubMenu(menu, "Fracciones Binarias", "", self.Op3)
-        subMenuPrin4 = self.createSubMenu(menu, "Interpolacion", "Metodo de Newton", self.Op4)
+        self.createSubMenu(menu, "Principal","", self.Op0)
+        self.createSubMenu(menu, "Aproximación basicas", "Polinomio de Mclaurin/Taylor", self.Op1)
+        self.createSubMenu(menu, "Sistema de Numeración posicional", "", self.Op2)
+        self.createSubMenu(menu, "Fracciones Binarias", "", self.Op3)
+        self.createSubMenu(menu, "Interpolacion", "Metodo de Newton", self.Op4)
         return menu
 
     def createSubMenu(self,MenuTO,title,subs,Gcommand):#Prueba de los menus y submenus ----> No se encuentra finalizado
@@ -49,7 +52,7 @@ class windows:
         #subMenu.add_command(label="Metodo de Biseccion",command=self.nada)
         return subMenu
 
-    def createConsole(self):
+    def createConsole(self):#El scroll no esta bien implementado
         print("Creando consola")
         #Creando Scrollbar
         Eje = "y"
@@ -84,7 +87,7 @@ class windows:
     def Op2(self):
         self.insertLisBox(self.listbox, "Sistema de Numeracion posicional", LEFT, "cls")
         self.prin.destroy()
-        startGUI("Métodos Numéricos", "Op1", "Aproximaciones Basicas")
+        startGUI("Métodos Numéricos", "Op2", "Sistema de Numeracion Posicional")
         #Sistema de Numeracion posicional
 
     def Op3(self):
@@ -141,17 +144,13 @@ cantidad produente de errores.''',370,460,210)
 
     def createGUIAprox(self):
         self.insertLisBox(self.listbox, "Cargando widgest...", LEFT, "cls")
-        self.FuncionGET = StringVar()
-        self.Xget = StringVar()
-        self.EABSget = IntVar()
-        self.ERELget = IntVar()
         self.createLabel(self.LabelPrin,"F(X)",70,30)
         self.createLabel(self.LabelPrin,"Grado ",70,80)
         self.createLabel(self.LabelPrin,"X ",200,80)
 
         self.createEntry(self.LabelPrin, self.FuncionGET, 140, 30)
         self.createEntry(self.LabelPrin,self.Xget,230,80,0.04)
-        self.createSpinbox(self.LabelPrin,1,50,140,80,0.04)
+        self.spnBOX = self.createSpinbox(self.LabelPrin,1,50,140,80,0.04)
 
         btnSTART = self.createButton(self.prin,"Empezar","hand1",RAISED,self.derivar,350,55)
         btnSTART.configure(width=27)
@@ -169,24 +168,28 @@ cantidad produente de errores.''',370,460,210)
         #------------------------------------------------------------> SCROLL V.3
         frame_gen = Frame(self.prin,relief=RIDGE,borderwidth="1")
         scrollbarView = Scrollbar(frame_gen,orient=VERTICAL,takefocus=FALSE)
-        textView = Text(frame_gen, wrap=WORD, width=91, highlightthickness=0)
+        self.textView = Text(frame_gen, wrap=WORD, width=91, highlightthickness=0,state=DISABLED)
 
-        FraProc = self.createFrame(textView, 745, 600, NONE, 0, 0, 0, 60, 190, 0)
-        lstDevA = self.createLisBox(FraProc, 15, 15, NONE, NONE)
-        lstDevA.place(x=20, y=20)
-        self.createText(FraProc, 140, 20, 95, 1, DISABLED)
-        self.createLabel(FraProc, "Aproximación", 140, 80, NONE)
-        self.createText(FraProc, 240, 80, 78, 1, DISABLED)
-        self.createMessage(FraProc, "Polinomio de Mclaurin/Taylor", 240, 340, 195)
-        self.createMessage(FraProc, "assfdfdfdfdf", 240, 340, 450)
-        textView.window_create(INSERT,window=FraProc)
+        #FraProc = self.createFrame(textView, 745, 600, NONE, 0, 0, 0, 60, 190, 0)
+        #lstDevA = self.createLisBox(FraProc, 15, 15, NONE, NONE)
+        #lstDevA.place(x=20, y=20)
+        #self.Txt = self.createText(FraProc, 140, 20, 95, 1, DISABLED)
+        #self.createLabel(FraProc, "Aproximación", 140, 80, NONE)
+        #self.TxtPOL = self.createText(FraProc, 240, 80, 78, 1, DISABLED)
+        #self.createLabel(FraProc,"Error Absoluto",140,150,NONE)
+        #self.TxtEA = self.createText(FraProc,240,150,26,1,DISABLED)
+        #self.createLabel(FraProc, "Error Relativo", 440, 150, NONE)
+        #self.TxtER = self.createText(FraProc, 550, 150, 26, 1, DISABLED)
+        #self.createMessage(FraProc, "assfdfdfdfdf", 240, 340, 450)
+        #self.createMessage(FraProc, "Polinomio de Mclaurin/Taylor", 240, 340, 225)
+        #textView.window_create(INSERT,window=FraProc)
 
-        scrollbarView.config(command=textView.yview)
+        scrollbarView.config(command=self.textView.yview)
         #textView.bind('<Configure>', self.defRegion(textView))
-        textView.config(yscrollcommand=scrollbarView.set)
+        self.textView.config(yscrollcommand=scrollbarView.set)
         scrollbarView.pack(side=RIGHT, fill=Y)
         #frame.place(side=LEFT,expand=TRUE,fill=BOTH)
-        textView.pack(side=LEFT, expand=True, fill=BOTH)
+        self.textView.pack(side=LEFT, expand=True, fill=BOTH)
         frame_gen.place(x=60, y=190)
         #------------------------------------------------------------> SCROLL V.3
         self.top_derivate = self.createTop_Level("Derivaciones")
@@ -200,7 +203,7 @@ cantidad produente de errores.''',370,460,210)
         event.configure(scrollregion=event.bbox(ALL))
 
     def createText(self,Contenedor,gw,gy,gW,gH,gstate):
-        textgen = Text(Contenedor,background="white",foreground="black",width=gW,height=gH,state=gstate)
+        textgen = Text(Contenedor,background="white",foreground="black",width=gW,height=gH,state=gstate)#Debe ser ingresado
         textgen.configure(font="TkTextFont")
         textgen.configure(highlightbackground="#d9d9d9")
         textgen.configure(highlightcolor="black")
@@ -210,6 +213,7 @@ cantidad produente de errores.''',370,460,210)
         textgen.configure(undo="1")
         textgen.configure(wrap=WORD)
         textgen.place(x=gw,y=gy)
+        return textgen
 
     def createwidgest(self,op,sg):
         self.LabelPrin = self.createLabelF(self.prin, sg, 10, 10)
@@ -302,6 +306,7 @@ cantidad produente de errores.''',370,460,210)
 
     def insertLisBox(self,Contenedor,item,Gside,lpro):#El return debe ser la confirmacon de su agregaccion
         print("Insertar valores a list")
+        print("VALOR --> " + str(item))
         agregar = ""
         if  lpro == "cls":
             agregar = time.strftime("%c") + " >> "
@@ -326,6 +331,7 @@ cantidad produente de errores.''',370,460,210)
         if (Derivar == ""):
             text = "No ha ingresado derivada!"
         if (text == "Procesando derivada... "):
+            ProcSerieDeTaylor.metodosyseries(self,'1')
             self.ShowTop_level(self.top_derivate)
         self.insertLisBox(self.listbox, text, LEFT, "cls")
 
