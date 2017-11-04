@@ -13,7 +13,7 @@ class metodosyseries:
     def __init__(self, other, Op):
         print("Estoy en ProcSerieDeTaylor.py")
         #print(str(SerieDeTaylor.windows.listbox))
-        self.Clasita = other
+        self.clsprin = other
         #Clasita.retunVAL(Clasita)
         SerieDeTaylor.windows.insertLisBox(other,other.listbox,"Ejecutando...", SerieDeTaylor.LEFT, "cls")
         self.Orden = []
@@ -29,17 +29,20 @@ class metodosyseries:
             self.AproximacionLineal();
 
     def SerieTaylor(self):
-        F = self.Clasita.FuncionGET.get()
-        X = self.Clasita.Xget.get()#corresponde al 0 o 1, cambiando de Taylor a Mclaurin
+        F_Derivar = self.clsprin.FuncionGET.get()
+        X_aprox = self.clsprin.Xget.get()
+        G_aprox = self.clsprin.spnBOX.get()
+        EBS_check = self.clsprin.EABSget.get()
+        ERL_check = self.clsprin.ERELget.get()
+        #---------------------------------->
         A = "0" #0 ó 1 / Mclaurin o Taylor
-        N = self.Clasita.spnBOX.get()#Grado del polinomio
-        self.Serie(F, X, A, N)
+        self.Serie(F_Derivar, '0.5', X_aprox, G_aprox)
 
     def Serie(self,F,X,A,G):#e^x,,0,5
         FD = []
         FD = self.Derivada(F, G)
         for i in range(0,len(FD)):
-            print("Funciones derivadas ----> " + str(FD[i]))
+            SerieDeTaylor.windows.insertLisBox(self.clsprin, self.clsprin.listbox, str(FD[i]), SerieDeTaylor.LEFT, "cls")
         lenDerivadas = len(FD)
         x = Symbol('x')
         XiLimp = float(eval(X))  # 1.0466666666666666 // El float no es encuentra haciendo nada.
@@ -65,9 +68,11 @@ class metodosyseries:
         Derivada = Funcion
         Derivadas = []
         x = Symbol('x')
+        e = Symbol('e')
         if grado == "0":
             cadena = Derivada.capitalize()
-            coun = cadena.count("x")
+            coun = cadena.count("x")#Numero de x en la función
+            print(str(eval(Function)))
             Derivadas.insert(0, eval(Funcion))
             for i in range(1, coun + 1):
                 Derivada = diff(Derivada)
