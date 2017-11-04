@@ -27,6 +27,7 @@ class windows:
         self.FuncionGET = StringVar()
         self.prin = master
         self.logoCTB = PhotoImage(file="img\ctb.png")
+        self.formtaylor = PhotoImage(file="img\ml_taylor.png")
         self.createwidgest(op,sg)
 
     def createMenu(self):# ---> Pertenece a todas las opciones
@@ -81,7 +82,7 @@ class windows:
     def Op1(self):
         self.insertLisBox(self.listbox, "Polinomio de Mclaurin/Taylor", LEFT, "cls")
         self.prin.destroy()
-        startGUI("Métodos Numéricos","Op1","Aproximaciones Basicas")
+        startGUI("Métodos Numéricos V.0.0.1","Op1","Aproximaciones Basicas")
         #Polinimio de Mclaurin/Taylor
 
     def Op2(self):
@@ -132,7 +133,7 @@ cantidad produente de errores.''',370,460,210)
         FraSeparador = self.createFrame(self.prin,5,125,NONE,10,0,0,430,210,0)
         self.configFrameDefault(FraSeparador,SUNKEN)
         #LabeIMG = self.createFrame(self.prin,145,115,NONE,0,0,0,80,60)
-        LabeIMG = self.createLabel(self.prin,"",60,25,NONE)
+        LabeIMG = self.createLabel(self.prin,"",60,25,NONE,self.logoCTB)
         FraSeparador2 = self.createFrame(self.prin,745,5,0,0,0,0,70,360,0)
         self.configFrameDefault(FraSeparador2,RIDGE)
         self.insertLisBox(self.listbox, "GUI principal cargada con exito!!!", LEFT, "cls")
@@ -146,7 +147,7 @@ cantidad produente de errores.''',370,460,210)
         self.insertLisBox(self.listbox, "Cargando widgest...", LEFT, "cls")
         self.createLabel(self.LabelPrin,"F(X)",70,30)
         self.createLabel(self.LabelPrin,"Grado ",70,80)
-        self.createLabel(self.LabelPrin,"X ",200,80)
+        self.createLabel(self.LabelPrin,"A ",200,80)
 
         self.createEntry(self.LabelPrin, self.FuncionGET, 140, 30)
         self.createEntry(self.LabelPrin,self.Xget,230,80,0.04)
@@ -169,8 +170,8 @@ cantidad produente de errores.''',370,460,210)
         frame_gen = Frame(self.prin,relief=RIDGE,borderwidth="1")
         scrollbarView = Scrollbar(frame_gen,orient=VERTICAL,takefocus=FALSE)
         self.textView = Text(frame_gen, wrap=WORD, width=91, highlightthickness=0,state=DISABLED)
-
-        #FraProc = self.createFrame(textView, 745, 600, NONE, 0, 0, 0, 60, 190, 0)
+        ########################################################################################
+        #FraProc = self.createFrame(self.textView, 745, 600, NONE, 0, 0, 0, 60, 190, 0)
         #lstDevA = self.createLisBox(FraProc, 15, 15, NONE, NONE)
         #lstDevA.place(x=20, y=20)
         #self.Txt = self.createText(FraProc, 140, 20, 95, 1, DISABLED)
@@ -182,8 +183,8 @@ cantidad produente de errores.''',370,460,210)
         #self.TxtER = self.createText(FraProc, 550, 150, 26, 1, DISABLED)
         #self.createMessage(FraProc, "assfdfdfdfdf", 240, 340, 450)
         #self.createMessage(FraProc, "Polinomio de Mclaurin/Taylor", 240, 340, 225)
-        #textView.window_create(INSERT,window=FraProc)
-
+        #self.textView.window_create(INSERT,window=FraProc)
+        #########################################################################################
         scrollbarView.config(command=self.textView.yview)
         #textView.bind('<Configure>', self.defRegion(textView))
         self.textView.config(yscrollcommand=scrollbarView.set)
@@ -192,11 +193,16 @@ cantidad produente de errores.''',370,460,210)
         self.textView.pack(side=LEFT, expand=True, fill=BOTH)
         frame_gen.place(x=60, y=190)
         #------------------------------------------------------------> SCROLL V.3
-        self.top_derivate = self.createTop_Level("Derivaciones")
+        self.top_derivate = self.createTop_Level("Derivaciones","400x300+20+20")
         Label2 = self.createLabel(self.top_derivate, text="Derivadas", xc=10, yc=0)
         ListDeriv = self.createLisBox(self.top_derivate, 15, 63, NONE, NONE)
         self.insertLisBox(ListDeriv, "-2x^3", LEFT, "")
         ListDeriv.place(x=10, y=30)
+        #-------------------------------------------------------------> Formula
+        self.top_formula = self.createTop_Level("Formula Serie de Taylor","400x141+2+20")
+        LabelMGF = self.createLabel(self.top_formula,"",0,0,NONE,self.formtaylor)
+        self.ShowTop_level(self.top_formula)
+        #-------------------------------------------------------------> Formula
         self.insertLisBox(self.listbox, "GUI cargada correctamente!!!", LEFT, "cls")
 
     def defRegion(self,event):
@@ -266,14 +272,14 @@ cantidad produente de errores.''',370,460,210)
         LFrame.pack(fill="both", expand="yes")
         return LFrame
 
-    def createLabel(self,Contenedor,text="Default",xc = 0,yc= 0,side=NONE):
+    def createLabel(self,Contenedor,text="Default",xc = 0,yc= 0,side=NONE,imgURL = NONE):
         print("Crea label")
         if xc >= 0 and yc >= 0:
             if text!="":
                 LblTexNor = Label(Contenedor, text=text + " = ").place(x=xc,y=yc)
             else:
                 try:
-                    LblTexNor = Label(Contenedor,image=self.logoCTB).place(x=xc,y=yc)
+                    LblTexNor = Label(Contenedor,image=imgURL).place(x=xc,y=yc)
                 except ImportWarning:
                     self.insertLisBox(self.listbox, "No se ha podido cargar la imagen, es posible que la imagen no se encuentre en la ruta por defecto!!!", LEFT, "cls")
         else:
@@ -325,11 +331,15 @@ cantidad produente de errores.''',370,460,210)
         except ImportWarning:
             self.insertLisBox(self.listbox, "El objeto no puedo ser destruido - ERROR -", LEFT, "cls")
 
-    def derivar(self):
-        Derivar = self.FuncionGET.get()
+    def derivar(self):#Verificar que todos los campos esten llenos.
+        F_Derivar = self.FuncionGET.get()
+        X_aprox = self.Xget.get()
+        G_aprox = self.spnBOX.get()
+        EBS_check = self.EABSget.get()
+        ERL_check = self.ERELget.get()
         text = "Procesando derivada... "
-        if (Derivar == ""):
-            text = "No ha ingresado derivada!"
+        if (F_Derivar == NONE or X_aprox == NONE):
+            text = "!Debe ingresar todos los datos!"
         if (text == "Procesando derivada... "):
             ProcSerieDeTaylor.metodosyseries(self,'1')
             self.ShowTop_level(self.top_derivate)
