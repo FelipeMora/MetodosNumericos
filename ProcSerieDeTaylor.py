@@ -27,30 +27,30 @@ class metodosyseries:
             self.MetodoSecante();
         elif Op == '5':
             self.AproximacionLineal();
+        elif Op == '6':
+            self.ConvertBase()
 
     def SerieTaylor(self):
         F_Derivar = self.clsprin.FuncionGET.get()
-        X_aprox = self.clsprin.Xget.get()
+        A_aprox = self.clsprin.Xget.get()
         G_aprox = self.clsprin.spnBOX.get()
+        X_aprox = self.clsprin.X.get()
         EBS_check = self.clsprin.EABSget.get()
         ERL_check = self.clsprin.ERELget.get()
         #---------------------------------->
         A = "0" #0 ó 1 / Mclaurin o Taylor
-        self.Serie(F_Derivar, '0.5', X_aprox, G_aprox)
+        self.Serie(F_Derivar, X_aprox, A_aprox, G_aprox)
 
     def Serie(self,F,X,A,G):#e^x,,0,5
-        FD = []
+        self.clsprin.Txt.insert(END, F)
         FD = self.Derivada(F, G)
         for i in range(0,len(FD)):
-            SerieDeTaylor.windows.insertLisBox(self.clsprin, self.clsprin.listbox, str(FD[i]), SerieDeTaylor.LEFT, "cls")
+            SerieDeTaylor.windows.insertLisBox(self.clsprin, self.clsprin.lstDevA, str(FD[i]), SerieDeTaylor.LEFT, "",20,20)
         lenDerivadas = len(FD)
         x = Symbol('x')
         XiLimp = float(eval(X))  # 1.0466666666666666 // El float no es encuentra haciendo nada.
         ALimp = float(eval(A))  # 0.785 // Pasa de str a float // Valor a predecir pasado a float.
         OrdenRESULT = 0.0
-        print('|-----------------------------------|')
-        print('|-------|  Serie de Taylor |--------|')
-        print('|___________________________________|')
         for i in range(0, lenDerivadas - 1):
             if OrdenRESULT == 0.0:
                 FuncionEnA = FD[i].subs('x', ALimp)
@@ -62,17 +62,17 @@ class metodosyseries:
             Fact = factorial(i + 1)
             OrdenRESULT = FuncionEnA + ((FuncionDev * (FuncionRes ** 1)) / Fact)
             print(" | ", i, " | ", OrdenRESULT, " | ")
-        print('______________________________')
+            SerieDeTaylor.windows.insertLisBox(self.clsprin, self.clsprin.ListDeriv, str(OrdenRESULT), SerieDeTaylor.LEFT, "")
+        self.ErrorABSandREL(F,X,OrdenRESULT)
+        self.clsprin.TxtPOL.insert(END,OrdenRESULT)
 
     def Derivada(self,Funcion,grado):
         Derivada = Funcion
         Derivadas = []
         x = Symbol('x')
-        e = Symbol('e')
         if grado == "0":
             cadena = Derivada.capitalize()
             coun = cadena.count("x")#Numero de x en la función
-            print(str(eval(Function)))
             Derivadas.insert(0, eval(Funcion))
             for i in range(1, coun + 1):
                 Derivada = diff(Derivada)
@@ -83,6 +83,16 @@ class metodosyseries:
                 Derivada = diff(Derivada,x)
                 Derivadas.insert(i, Derivada)
         return Derivadas
+
+    def ErrorABSandREL(self,F,X,ValE):
+        x = Symbol('x')
+        Xlimp = float(eval(X))
+        FLimp = eval(F)
+        ValT = FLimp.subs('x',Xlimp)
+        ErrorABS = abs((ValT-ValE))
+        ErrorREL = abs(((ErrorABS/ValT)*100))
+        self.clsprin.TxtEA.insert(END,ErrorABS)
+        self.clsprin.TxtER.insert(END,ErrorREL)
 
     def MetodoNewton(self):
         Count = 1
@@ -195,7 +205,6 @@ class metodosyseries:
             Xuno = X
         print('|____________________________________|')
 
-
     def ErrorAcumulado(self,Vac,Van):
         Error = abs(((Vac-Van)/Vac)*100)
         return Error
@@ -283,6 +292,22 @@ class metodosyseries:
         C=A*B
         print("C = " + str(C))"""
         print(" Coeficiente de Correlación " + str(Corre))
+
+    def ConvertBase(self):
+        n = self.clsprin.NumSIS.get()
+        a = self.clsprin.a_base.get()
+        ni = int(n)
+        ai = int(a)
+        ArrBanrio = []
+        while ni // ai != 0:
+            ArrBanrio.insert(len(ArrBanrio), str(ni%ai))
+            ni = ni //ai
+        j = len(ArrBanrio) - 1
+        numBin = ""
+        while j >= 0:
+            numBin = numBin + "" + ArrBanrio[j]
+            j = j - 1
+        self.clsprin.textViewGEN.insert(END,n + " a base 2 = "+ numBin + " ~~~~~~~~")
 
 #if Op == '1':
 #    SerieTaylor();
