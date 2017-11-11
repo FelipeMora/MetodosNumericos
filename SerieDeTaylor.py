@@ -23,7 +23,9 @@ class windows:
     def __init__(self, master, op,sg):
         self.ERELget = IntVar()
         self.EABSget = IntVar()
+        self.NumSIS = StringVar()
         self.Xget = StringVar()
+        self.X = StringVar()
         self.FuncionGET = StringVar()
         self.prin = master
         self.logoCTB = PhotoImage(file="img\ctb.png")
@@ -88,7 +90,7 @@ class windows:
     def Op2(self):
         self.insertLisBox(self.listbox, "Sistema de Numeracion posicional", LEFT, "cls")
         self.prin.destroy()
-        startGUI("Métodos Numéricos", "Op2", "Sistema de Numeracion Posicional")
+        startGUI("Métodos Numéricos V.0.0.1", "Op2", "Sistema de Numeracion Posicional")
         #Sistema de Numeracion posicional
 
     def Op3(self):
@@ -110,7 +112,7 @@ class windows:
         switcher = {
             'Prin': self.createGUIPrin,
             'Op1': self.createGUIAprox,
-            'Op2': "dos",
+            'Op2': self.createGUISisPos,
             'Op3': "dos",
             'Op4': "dos",
         }
@@ -147,44 +149,49 @@ cantidad produente de errores.''',370,460,210)
         self.insertLisBox(self.listbox, "Cargando widgest...", LEFT, "cls")
         self.createLabel(self.LabelPrin,"F(X)",70,30)
         self.createLabel(self.LabelPrin,"Grado ",70,80)
+        self.createLabel(self.LabelPrin,"X ",70,120)
         self.createLabel(self.LabelPrin,"A ",200,80)
 
         self.createEntry(self.LabelPrin, self.FuncionGET, 140, 30)
         self.createEntry(self.LabelPrin,self.Xget,230,80,0.04)
+        self.createEntry(self.LabelPrin,self.X,140,120)
         self.spnBOX = self.createSpinbox(self.LabelPrin,1,50,140,80,0.04)
 
         btnSTART = self.createButton(self.prin,"Empezar","hand1",RAISED,self.derivar,350,55)
         btnSTART.configure(width=27)
 
+        btnCLS = self.createButton(self.prin,"Limpiar","hand1",RAISED,self.cls,350,140)
+        btnCLS.configure(width=27)
+
         self.createCheckBTN(self.prin,"Error absoluto",self.EABSget,350,105)
         self.createCheckBTN(self.prin,"Error relativo",self.ERELget,460,105)
 
-        FraSeparador = self.createFrame(self.prin,5,115,NONE,0,0,0,590,30,0)
+        FraSeparador = self.createFrame(self.prin,5,115,NONE,0,0,0,590,55,0)
         self.configFrameDefault(FraSeparador, SUNKEN)
 
-        self.createMessage(self.prin,'''La aproximación sera realizada con el metodo de mclaurin y taylor, en el proceso, sera mostrada la grafica correspondiente a la funcion registrada.''',180,620,30)
+        self.createMessage(self.prin,'''La aproximación sera realizada con el metodo de mclaurin y taylor, en el proceso, sera mostrada la grafica correspondiente a la funcion registrada.''',180,620,55)
 
-        FraSeparador2 = self.createFrame(self.prin,745,5,NONE,0,0,0,60,170,0)
+        FraSeparador2 = self.createFrame(self.prin,745,5,NONE,0,0,0,60,180,0)
         self.configFrameDefault(FraSeparador2,RIDGE)
         #------------------------------------------------------------> SCROLL V.3
         frame_gen = Frame(self.prin,relief=RIDGE,borderwidth="1")
         scrollbarView = Scrollbar(frame_gen,orient=VERTICAL,takefocus=FALSE)
         self.textView = Text(frame_gen, wrap=WORD, width=91, highlightthickness=0,state=DISABLED)
-        ########################################################################################
-        #FraProc = self.createFrame(self.textView, 745, 600, NONE, 0, 0, 0, 60, 190, 0)
-        #lstDevA = self.createLisBox(FraProc, 15, 15, NONE, NONE)
-        #lstDevA.place(x=20, y=20)
-        #self.Txt = self.createText(FraProc, 140, 20, 95, 1, DISABLED)
-        #self.createLabel(FraProc, "Aproximación", 140, 80, NONE)
-        #self.TxtPOL = self.createText(FraProc, 240, 80, 78, 1, DISABLED)
-        #self.createLabel(FraProc,"Error Absoluto",140,150,NONE)
-        #self.TxtEA = self.createText(FraProc,240,150,26,1,DISABLED)
-        #self.createLabel(FraProc, "Error Relativo", 440, 150, NONE)
-        #self.TxtER = self.createText(FraProc, 550, 150, 26, 1, DISABLED)
-        #self.createMessage(FraProc, "assfdfdfdfdf", 240, 340, 450)
-        #self.createMessage(FraProc, "Polinomio de Mclaurin/Taylor", 240, 340, 225)
-        #self.textView.window_create(INSERT,window=FraProc)
         #########################################################################################
+        FraProc = self.createFrame(self.textView, 745, 600, NONE, 0, 0, 0, 60, 190, 0)
+        self.lstDevA = self.createLisBox(FraProc, 15, 15, NONE, NONE)
+        self.lstDevA.place(x=20, y=20)
+        self.Txt = self.createText(FraProc, 140, 20, 95, 1, NORMAL)
+        self.createLabel(FraProc, "Aproximación", 140, 80, NONE)
+        self.TxtPOL = self.createText(FraProc, 240, 80, 78, 1, NORMAL)
+        self.createLabel(FraProc,"Error Absoluto",140,150,NONE)
+        self.TxtEA = self.createText(FraProc,240,150,26,1,NORMAL)
+        self.createLabel(FraProc, "Error Relativo", 440, 150, DISABLED)
+        self.TxtER = self.createText(FraProc, 550, 150, 26, 1, NORMAL)
+        self.createMessage(FraProc, "assfdfdfdfdf", 240, 340, 450)
+        self.createMessage(FraProc, "Polinomio de Mclaurin/Taylor", 240, 340, 225)
+        self.textView.window_create(INSERT,window=FraProc)
+        ##########################################################################################
         scrollbarView.config(command=self.textView.yview)
         #textView.bind('<Configure>', self.defRegion(textView))
         self.textView.config(yscrollcommand=scrollbarView.set)
@@ -193,16 +200,59 @@ cantidad produente de errores.''',370,460,210)
         self.textView.pack(side=LEFT, expand=True, fill=BOTH)
         frame_gen.place(x=60, y=190)
         #------------------------------------------------------------> SCROLL V.3
-        self.top_derivate = self.createTop_Level("Derivaciones","400x300+20+20")
-        Label2 = self.createLabel(self.top_derivate, text="Derivadas", xc=10, yc=0)
-        ListDeriv = self.createLisBox(self.top_derivate, 15, 63, NONE, NONE)
-        self.insertLisBox(ListDeriv, "-2x^3", LEFT, "")
-        ListDeriv.place(x=10, y=30)
+        self.top_derivate = self.createTop_Level("Aproximaciones","400x300+20+20")
+        Label2 = self.createLabel(self.top_derivate, text="Aproximaciones sucesivas", xc=10, yc=0)
+        self.ListDeriv = self.createLisBox(self.top_derivate, 15, 63, NONE, NONE)
+        self.ListDeriv.place(x=10, y=30)
         #-------------------------------------------------------------> Formula
         self.top_formula = self.createTop_Level("Formula Serie de Taylor","400x141+2+20")
         LabelMGF = self.createLabel(self.top_formula,"",0,0,NONE,self.formtaylor)
         self.ShowTop_level(self.top_formula)
         #-------------------------------------------------------------> Formula
+        self.insertLisBox(self.listbox, "GUI cargada correctamente!!!", LEFT, "cls")
+
+    def createGUISisPos(self):
+
+        self.insertLisBox(self.listbox, "Cargando widgest...", LEFT, "cls")
+        self.createLabel(self.LabelPrin, "Numero", 70, 40)
+
+        self.createLabel(self.LabelPrin,"De ",70,90)
+        self.createEntry(self.LabelPrin, self.NumSIS, 140, 40)
+
+        Spinbox(self.LabelPrin,values=(2,8,10,16)).place(x=140,y=90,relwidth=0.04)
+
+        self.createLabel(self.LabelPrin,"A ",190,90)
+        self.a_base = Spinbox(self.LabelPrin,values=(2,8,10,16))
+        self.a_base.place(x=230,y=90,relwidth=0.04)
+
+        FraSeparador = self.createFrame(self.prin, 5, 115, NONE, 0, 0, 0, 590, 55, 0)
+        self.configFrameDefault(FraSeparador, SUNKEN)
+
+        self.createMessage(self.prin,'''Se encuentran incorporados la conversion de la Base 10, Base 2, Base 8 y Base 16. Junto con sus posibles combinaciones.''',
+                           180, 620, 55)
+
+        btnSTART = self.createButton(self.prin, "Convertir", "hand1", RAISED, self.SisNUM, 350, 65)
+        btnSTART.configure(width=27)
+
+        self.createMessage(self.prin,
+                           '''Para evitar procesos innecesarios no sera permitido convertir asi mismo.''',
+                           180, 350, 100)
+
+        FraSeparador2 = self.createFrame(self.prin, 745, 5, NONE, 0, 0, 0, 60, 180, 0)
+        self.configFrameDefault(FraSeparador2, RIDGE)
+
+        frame_gen = Frame(self.prin, relief=RIDGE, borderwidth="1")
+        scrollbarView = Scrollbar(frame_gen, orient=VERTICAL, takefocus=FALSE)
+        self.textViewGEN = Text(frame_gen, wrap=WORD, width=91, highlightthickness=0, state=NORMAL)
+        scrollbarView.config(command=self.textViewGEN.yview)
+        # textView.bind('<Configure>', self.defRegion(textView))
+        self.textViewGEN.config(yscrollcommand=scrollbarView.set)
+        scrollbarView.pack(side=RIGHT, fill=Y)
+        # frame.place(side=LEFT,expand=TRUE,fill=BOTH)
+        self.textViewGEN.pack(side=LEFT, expand=True, fill=BOTH)
+        frame_gen.place(x=60, y=190)
+
+
         self.insertLisBox(self.listbox, "GUI cargada correctamente!!!", LEFT, "cls")
 
     def defRegion(self,event):
@@ -310,7 +360,7 @@ cantidad produente de errores.''',370,460,210)
             lstBox['xscrollcommand'] = command.set
         return lstBox
 
-    def insertLisBox(self,Contenedor,item,Gside,lpro):#El return debe ser la confirmacon de su agregaccion
+    def insertLisBox(self,Contenedor,item,Gside,lpro,px="",py=""):#El return debe ser la confirmacon de su agregaccion
         print("Insertar valores a list")
         print("VALOR --> " + str(item))
         agregar = ""
@@ -319,7 +369,10 @@ cantidad produente de errores.''',370,460,210)
             # -----> for item in ["one", "two", "three", "four"]:
         Contenedor.insert(END, agregar + item)
         Contenedor.see(END)
-        Contenedor.pack(side=Gside)
+        if px == "" and py == "":
+            Contenedor.pack(side=Gside)
+        else:
+            Contenedor.place(x=px, y=py)
 
     def ShowTop_level(self,top_level):
         print("Mostrar el top_level")
@@ -334,9 +387,6 @@ cantidad produente de errores.''',370,460,210)
     def derivar(self):#Verificar que todos los campos esten llenos.
         F_Derivar = self.FuncionGET.get()
         X_aprox = self.Xget.get()
-        G_aprox = self.spnBOX.get()
-        EBS_check = self.EABSget.get()
-        ERL_check = self.ERELget.get()
         text = "Procesando derivada... "
         if (F_Derivar == NONE or X_aprox == NONE):
             text = "!Debe ingresar todos los datos!"
@@ -344,6 +394,21 @@ cantidad produente de errores.''',370,460,210)
             ProcSerieDeTaylor.metodosyseries(self,'1')
             self.ShowTop_level(self.top_derivate)
         self.insertLisBox(self.listbox, text, LEFT, "cls")
+
+    def cls(self):
+        print("Debo limpiar")
+        self.prin.destroy()
+        startGUI("Métodos Numéricos V.0.0.1","Op1","Aproximaciones Basicas")
+
+    def SisNUM(self):
+        #Revisar campos
+        Num_SIS = self.NumSIS.get()
+        text = "Convirtiendo"
+        if Num_SIS == "":
+            text = "¡ Debe ingresar el numero !"
+        else:
+            ProcSerieDeTaylor.metodosyseries(self,'6')
+        self.insertLisBox(self.listbox,text,LEFT,"cls")
 
 if __name__ == '__main__':
     startGUI("Métodos Numéricos V.0.0.1","Prin","Principal")
