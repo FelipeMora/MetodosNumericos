@@ -1,6 +1,8 @@
 from tkinter import *
 import time
 import ProcSerieDeTaylor
+import CreateUI as c
+import readXML as rdml
 
 try:
     import ttk
@@ -14,64 +16,71 @@ def startGUI(title,OpG,sg):
     root = Tk()
     root.geometry(WI+"x"+H+"+379+66")
     root.title(title)
-    root.resizable(width=FALSE,height=FALSE)
-    windows(root,OpG,sg)
-    root.mainloop()
+    #root.resizable(width=FALSE,height=FALSE)
+    windows(root,OpG,sg,H,WI)
+    root.mainloop()#corre lo cargado.
 
 class windows:
 
-    def __init__(self, master, op,sg):
+
+    def __init__(self, master, init,sg,h,w):
+        self.prin = master
+        self.c_UI = c.creation(master,h,w)#Inicializa instancia de creación
+        self.console = NONE
         self.ERELget = IntVar()
         self.EABSget = IntVar()
         self.NumSIS = StringVar()
         self.Xget = StringVar()
         self.X = StringVar()
+        self.__defind_images()
         self.FuncionGET = StringVar()
-        self.prin = master
-        self.logoCTB = PhotoImage(file="img\ctb.png")
-        self.formtaylor = PhotoImage(file="img\ml_taylor.png")
-        self.createwidgest(op,sg)
+        self.createElements(init,sg)
 
-    def createMenu(self):# ---> Pertenece a todas las opciones
-        menu = Menu(self.prin)
-        menu.configure(relief=GROOVE)
-        menu.configure(borderwidth="10")
-        self.prin.config(menu=menu)
-        self.createSubMenu(menu, "Principal","", self.Op0)
-        self.createSubMenu(menu, "Aproximación basicas", "Polinomio de Mclaurin/Taylor", self.Op1)
-        self.createSubMenu(menu, "Sistema de Numeración posicional", "", self.Op2)
-        self.createSubMenu(menu, "Fracciones Binarias", "", self.Op3)
-        self.createSubMenu(menu, "Interpolacion", "Metodo de Newton", self.Op4)
-        return menu
+    def __defind_images(self):
+        self.ctb_img = PhotoImage(file="img\ctb.png")
+        self.taylor_img = PhotoImage(file="img\ml_taylor.png")
+        Label(self.prin,relief=SOLID,image=self.ctb_img).place(x=60,y=25)
+        #self.createLabel(self.prin,text="",xc=60,yc=25,side=NONE,imgURL=NONE)
+        #self.c_UI.createLabel(self.prin, text="", xc=60, yc=25, side=NONE, img_url=self.taylor_img)
 
-    def createSubMenu(self,MenuTO,title,subs,Gcommand):#Prueba de los menus y submenus ----> No se encuentra finalizado
-        subMenu = Menu(MenuTO)
-        if subs == "":
-            MenuTO.add_command(label=title,command=Gcommand)
-        else:
-            MenuTO.add_cascade(label=title,menu=subMenu)
-            subMenu.add_command(label=subs,command=Gcommand)
-        #subMenu.add_separator()
-        #subMenu.add_command(label="Metodo de Biseccion",command=self.nada)
-        return subMenu
+    # def createMenu(self):# ---> Pertenece a todas las opciones
+    #     menu = Menu(self.prin) #Inicia menu
+    #     menu.configure(relief=GROOVE)
+    #     menu.configure(borderwidth="10")
+    #     self.prin.config(menu=menu) #Agrega menu a label principal
+    #     rd = rdml.rdxml()
+    #     rd.defind_estructure()
+    #     print(rd.get_arr_dat)
+    #     self.createSubMenu(menu, "Principal","", self.Op0)
+    #     self.createSubMenu(menu, "Aproximación basicas", "Polinomio de Mclaurin/Taylor", self.Op1)
+    #     self.createSubMenu(menu, "Sistema de Numeración posicional", "", self.Op2)
+    #     self.createSubMenu(menu, "Fracciones Binarias", "", self.Op3)
+    #     self.createSubMenu(menu, "Interpolacion", "Metodo de Newton", self.Op4)
+    #     return menu
 
-    def createConsole(self):#El scroll no esta bien implementado
-        print("Creando consola")
-        #Creando Scrollbar
-        Eje = "y"
-        yScrollbar = self.createScroll(self.prin,VERTICAL)
-        #Creando lista
-        self.listbox = self.createLisBox(self.prin, 5, WI, yScrollbar, Eje)
-        self.listbox['bg'] = "#fff"
-        if Eje == "y":
-            print("yview")
-            yScrollbar['command'] = self.listbox.yview
-        else:
-            yScrollbar['command'] = self.listbox.xview
-        #Configuracion de list
-        self.listbox.configure(relief=GROOVE)
-        self.listbox.configure(borderwidth="2")
-        #FrameConsole = self.createFrame(self.prin, W, 50, BOTTOM, 10, 0, 0)
+    # def createSubMenu(self,MenuTO,title,subs,Gcommand):#Prueba de los menus y submenus ----> No se encuentra finalizado
+    #     subMenu = Menu(MenuTO)#Inicia submenu
+    #     if subs == "":
+    #         MenuTO.add_command(label=title,command=Gcommand)#Menu principal
+    #     else:
+    #         MenuTO.add_cascade(label=title,menu=subMenu)
+    #         subMenu.add_command(label=subs,command=Gcommand)
+    #     return MenuTO
+
+    # def createConsole(self):#El scroll no esta bien implementado
+    #     #Creando Scrollbar
+    #     Eje = "y"
+    #     yScrollbar = self.createScroll(self.prin,VERTICAL)#contenedor(root) y orientación(vertical)
+    #     #Creando lista relacionada con el scrollbar
+    #     self.listbox = self.createLisBox(self.prin, 5, WI, yScrollbar, Eje)
+    #     self.listbox['bg'] = "#fff"
+    #     #configurar el scrollbar para la lista
+    #     if Eje == "y": yScrollbar['command'] = self.listbox.yview
+    #     else: yScrollbar['command'] = self.listbox.xview
+    #     #Configuracion de list
+    #     self.listbox.configure(relief=GROOVE)
+    #     self.listbox.configure(borderwidth="2")
+    #     #FrameConsole = self.createFrame(self.prin, W, 50, BOTTOM, 10, 0, 0)
 
     def nada(self):
         text = "Hola!! No hago nada, solo estoy para pruebas." #Debe destruir todo lo que este adentro del  Labelprincipal
@@ -108,42 +117,41 @@ class windows:
         TopLevel.withdraw()
         return TopLevel
 
-    def catalogacion(self,arg):
-        switcher = {
-            'Prin': self.createGUIPrin,
-            'Op1': self.createGUIAprox,
-            'Op2': self.createGUISisPos,
-            'Op3': "dos",
-            'Op4': "dos",
-        }
+    def get_choice(self,arg):
+        switcher = {'P': self.createGUIPrin,'PMT': self.createGUIAprox,
+            'SNP': self.createGUISisPos,'FB': "dos",'MN': "dos",}
         return switcher.get(arg,"nothing")
 
-    def createGUIPrin(self):
-        self.insertLisBox(self.listbox, "Cargando widgest principales...", LEFT, "cls")
-        MsgIntro = self.createMessage(self.prin,'''Métodos Numéricos
+    def createGUIPrin(self):  # Carga todos los elementos que conforman la interfaz
 
-Metodologias que utilizan operaciones algebraicas
+        self.insertElement_Console("Cargando parametros principales...")
+        self.c_UI.createMessage(self.prin,'''Métodos Numéricos
+        
+Metodologías que utilizan operaciones algebraicas
 y aritmeticas para resolver de forma aproximada 
-ecuaciones complejas, en muchos de ellos es requerido
-aplicar derivadas, integrales y ecuaciones diferenciales''',370,80,210)
-        MsgNote = self.createMessage(self.prin,'''Notas
+ecuaciones complejas, en muchos de ellos es requerido 
+derivadas, integrales y ecuaciones difereniales.''',w=370,x=80,y=210)
+        self.c_UI.createMessage(self.prin,'''Notas
 
 Este software no sera desarrollado bajo ninguna metodologia
 en especial, ni tampoco se le aplicara un plan de pruebas
 estructurado. Por tal motivo, es posible que contenga una
-cantidad produente de errores.''',370,460,210)
-        FraSeparador = self.createFrame(self.prin,5,125,NONE,10,0,0,430,210,0)
-        self.configFrameDefault(FraSeparador,SUNKEN)
-        #LabeIMG = self.createFrame(self.prin,145,115,NONE,0,0,0,80,60)
-        LabeIMG = self.createLabel(self.prin,"",60,25,NONE,self.logoCTB)
-        FraSeparador2 = self.createFrame(self.prin,745,5,0,0,0,0,70,360,0)
-        self.configFrameDefault(FraSeparador2,RIDGE)
-        self.insertLisBox(self.listbox, "GUI principal cargada con exito!!!", LEFT, "cls")
+cantidad produente de errores.''',w=370,x=460,y=210)
 
-    def configFrameDefault(self,Contenedor,grelief):
-        Contenedor.configure(relief=grelief)
-        Contenedor.configure(borderwidth="2")
-        #Contenedor.configure(background="#d9d9d9")
+        self.c_UI.createFrame(self.prin,5,125,NONE,10,0,0,430,210,0,RAISED)
+
+        self.c_UI.createLabel(self.prin,text="",xc=60,yc=25,side=NONE,img_url=self.taylor_img)
+
+        #self.createLabel(self.prin,text="",xc=60,yc=25,side=NONE,imgURL="")
+
+        self.c_UI.createFrame(self.prin,745,5,0,0,0,0,70,360,0,RIDGE)
+
+        self.insertElement_Console("Principal cargada con exito")
+
+    # def configFrameDefault(self,Contenedor,grelief): #configuración para el Frame por defecto
+    #     Contenedor.configure(relief=grelief)
+    #     Contenedor.configure(borderwidth="2")
+    #    #Contenedor.configure(background="#d9d9d9")
 
     def createGUIAprox(self):
         self.insertLisBox(self.listbox, "Cargando widgest...", LEFT, "cls")
@@ -271,14 +279,18 @@ cantidad produente de errores.''',370,460,210)
         textgen.place(x=gw,y=gy)
         return textgen
 
-    def createwidgest(self,op,sg):
-        self.LabelPrin = self.createLabelF(self.prin, sg, 10, 10)
-        MenuPrin = self.createMenu()  # Creacion del menu principal
-        self.createConsole() # Todas las Op tendran una consola
-        self.insertLisBox(self.listbox, "Consola creada", LEFT, "cls")
-        #Pertenece
-        fun = self.catalogacion(op)
-        fun()
+    def createElements(self,init_choice,sg):
+        self.c_UI.createLabelFrame(self.prin, sg, 10, 10)
+
+        self.c_UI.create_menu()
+        self.console = self.c_UI.console
+        self.insertElement_Console("Consola creada")
+
+        exec_choice = self.get_choice(init_choice)
+        exec_choice()
+
+        #fun = self.catalogacion(op) #Catalogación de la opción de entrada.
+        #fun() #El valor return, indica la interfaz que será cargada.
 
     def createSpinbox(self,Contenedor,desde,hasta,gx,gy,grw):
         spinbox = Spinbox(Contenedor,from_=desde,to=hasta)
@@ -296,45 +308,45 @@ cantidad produente de errores.''',370,460,210)
         cnv.configure(borderwidth="2")
         return cnv
 
-    def createMessage(self,Contenedor,text,gw,gx,gy):
-        Msg = Message(Contenedor,width=gw)
-        Msg.place(x=gx,y=gy)
-        Msg.configure(text=text)
+    # def createMessage(self,Contenedor,text,gw,gx,gy):
+    #     Msg = Message(Contenedor,width=gw)
+    #     Msg.place(x=gx,y=gy)
+    #     Msg.configure(text=text)
 
-    def createScroll(self,Contenedor,Gorient):
-        scrollbar = Scrollbar(Contenedor,orient=Gorient)#orient=Gorient
-        return scrollbar
+    # def createScroll(self,Contenedor,Gorient): #Contenedor y la orientación.
+    #     scrollbar = Scrollbar(Contenedor,orient=Gorient)#orient=Gorient
+    #     scrollbar.pack(side = RIGHT, fill = Y)
+    #     return scrollbar
 
-    def createFrame(self,Contenedor,Gwidth,Gheight,side,gpadx,gpady,pack,gx,gy,placepre):
-        print("Creando Frame")
-        if pack == 0:
-            default = Frame(Contenedor,width=Gwidth,height=Gheight)
-            if placepre == 0:
-                default.place(x=gx, y=gy)
-        else:
-            default = Frame(Contenedor, width=Gwidth, height=Gheight, padx=gpadx, pady=gpady)
-            default.pack(side=side, padx=gpadx, pady=gpady)
-        return default
+    # def createFrame(self,Contenedor,Gwidth,Gheight,side,gpadx,gpady,pack,gx,gy,placepre):
+    #     print("Creando Frame")
+    #     if pack == 0:
+    #         default = Frame(Contenedor,width=Gwidth,height=Gheight)
+    #         if placepre == 0:
+    #             default.place(x=gx, y=gy)
+    #     else:
+    #         default = Frame(Contenedor, width=Gwidth, height=Gheight, padx=gpadx, pady=gpady)
+    #         default.pack(side=side, padx=gpadx, pady=gpady)
+    #     return default
 
-    def createLabelF(self,Contenedor,text="Default",Gpadx=0,Gpady=0):
-        print("Crea label frame")
-        LFrame = LabelFrame(Contenedor, text=text, padx=Gpadx, pady=Gpady)
-        LFrame.pack(fill="both", expand="yes")
-        return LFrame
+    # def createLabelF(self,Contenedor,text="Default",Gpadx=0,Gpady=0):
+    #     print("Crea label frame")
+    #     LFrame = LabelFrame(Contenedor, text=text, padx=Gpadx, pady=Gpady)
+    #     LFrame.pack(fill="both", expand="yes")
+    #     return LFrame
 
-    def createLabel(self,Contenedor,text="Default",xc = 0,yc= 0,side=NONE,imgURL = NONE):
-        print("Crea label")
+    def createLabel(self, container,text="DEFAULT",xc = 0,yc= 0,side=NONE,imgURL = NONE):
+
         if xc >= 0 and yc >= 0:
-            if text!="":
-                LblTexNor = Label(Contenedor, text=text + " = ").place(x=xc,y=yc)
+            if text!="": #Si tiene text="" lo que se agrega es una imagen
+                Label(container, text=text + " = ").place(x=xc,y=yc)
             else:
                 try:
-                    LblTexNor = Label(Contenedor,image=imgURL).place(x=xc,y=yc)
-                except ImportWarning:
-                    self.insertLisBox(self.listbox, "No se ha podido cargar la imagen, es posible que la imagen no se encuentre en la ruta por defecto!!!", LEFT, "cls")
-        else:
-            LblTexNor = Label(Contenedor, text=text).pack(side=side)
-        return LblTexNor
+                    Label(container, relief="solid", image=self.ctb_img).place(x=xc, y=yc)
+                    #Label_text_norm = Label(container, relief="solid", image=logoCTB).place(x=xc, y=yc)
+                except : self.insertElement_Console("No se ha podido cargar la imagen")
+        else: Label(container, text=text).pack(side=side)
+        #return Label_text_norm
 
     def createEntry(self, Contenedor, command=StringVar, xc=0, yc= 0,grw=NONE):
         print("Crea entry")
@@ -350,29 +362,17 @@ cantidad produente de errores.''',370,460,210)
         btnGET.place(x=xc, y=yc)
         return btnGET
 
-    def createLisBox(self,Contenedor,Gheight,Gwidth=50,command=NONE,eje=NONE):
-        print("Crea listBox")
-        lstBox = Listbox(Contenedor, height=Gheight, width=Gwidth)
-        if eje == "y":
-            print("Y scroll command")
-            lstBox['yscrollcommand'] = command.set
-        if eje == "x":
-            lstBox['xscrollcommand'] = command.set
-        return lstBox
+    # def createLisBox(self,Contenedor,Gheight,Gwidth=50,command=NONE,eje=NONE): #Crea una lista
+    #     lstBox = Listbox(Contenedor, height=Gheight, width=Gwidth)
+    #     if eje == "y":
+    #         lstBox['yscrollcommand'] = command.set
+    #     if eje == "x":
+    #         lstBox['xscrollcommand'] = command.set
+    #     return lstBox
 
-    def insertLisBox(self,Contenedor,item,Gside,lpro,px="",py=""):#El return debe ser la confirmacon de su agregaccion
-        print("Insertar valores a list")
-        print("VALOR --> " + str(item))
-        agregar = ""
-        if  lpro == "cls":
-            agregar = time.strftime("%c") + " >> "
-            # -----> for item in ["one", "two", "three", "four"]:
-        Contenedor.insert(END, agregar + item)
-        Contenedor.see(END)
-        if px == "" and py == "":
-            Contenedor.pack(side=Gside)
-        else:
-            Contenedor.place(x=px, y=py)
+    def insertElement_Console(self,element): #agrega contenido a la consola.
+        self.console.insert(END, time.strftime("%c") + " >> " + element)
+        self.console.see(END)
 
     def ShowTop_level(self,top_level):
         print("Mostrar el top_level")
@@ -387,7 +387,7 @@ cantidad produente de errores.''',370,460,210)
     def derivar(self):#Verificar que todos los campos esten llenos.
         F_Derivar = self.FuncionGET.get()
         X_aprox = self.Xget.get()
-        text = "Procesando derivada... "
+        text = "Procesando derivada..."
         if (F_Derivar == NONE or X_aprox == NONE):
             text = "!Debe ingresar todos los datos!"
         if (text == "Procesando derivada... "):
@@ -395,8 +395,7 @@ cantidad produente de errores.''',370,460,210)
             self.ShowTop_level(self.top_derivate)
         self.insertLisBox(self.listbox, text, LEFT, "cls")
 
-    def cls(self):
-        print("Debo limpiar")
+    def clean_master(self):
         self.prin.destroy()
         startGUI("Métodos Numéricos V.0.0.1","Op1","Aproximaciones Basicas")
 
@@ -411,4 +410,4 @@ cantidad produente de errores.''',370,460,210)
         self.insertLisBox(self.listbox,text,LEFT,"cls")
 
 if __name__ == '__main__':
-    startGUI("Métodos Numéricos V.0.0.1","Prin","Principal")
+    startGUI("Métodos Númericos V.0.0.1","P","Principal")
