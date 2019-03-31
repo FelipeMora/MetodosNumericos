@@ -12,6 +12,7 @@ class metodosyseries:
 
     def __init__(self, other, Op):
         print("Estoy en ProcSerieDeTaylor.py")
+        #self.AproximacionLineal() # Prueba de Aproximación Lienal
         #print(str(SerieDeTaylor.windows.listbox))
         self.clsprin = other
         #Clasita.retunVAL(Clasita)
