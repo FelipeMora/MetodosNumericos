@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <collection>
-    <menu title="Principal" comand="P"/>
+    <menu title="Principal" command="P"/>
     <menu title="Aproximaciones basicas">
         <sub_menu>
             <section comand="PMT">Polinomio de Mclaurin/Taylor</section>
         </sub_menu>
     </menu>
-    <menu title="Sistema de numeración posicional" comand="SNP"/>
+    <menu title="Sistema de numeración posicional" command="SNP"/>
     <menu title="Fracciones binarias" comand="FB"/>
     <menu title="Interpolación">
         <sub_menu>
             <section comand="MN">Metodo de Newton</section>
         </sub_menu>
     </menu>
-    <menu title="Teorema de valor intermedio" comand="TVI"/>
-    <menu title="Teorema generalizado de Rolle" comand="TGR"/>
+    <menu title="Teorema de valor intermedio" command="TVI"/>
+    <menu title="Teorema generalizado de Rolle" command="TGR"/>
 </collection>
