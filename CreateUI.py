@@ -13,26 +13,13 @@ class parameters_interfaces:
         self.__master = master
         self.photo = PhotoImage(file="img\ctb.png")
 
+    def __parameters_ui_p(self):
+        print("")
+
+    @property
     def parameters_ui_p(self):
-        print("Principal")
-        creation.create_message(self.__master, '''Métodos Numéricos
-
-        Metodologías que utilizan operaciones algebraicas
-        y aritmeticas para resolver de forma aproximada 
-        ecuaciones complejas, en muchos de ellos es requerido 
-        derivadas, integrales y ecuaciones difereniales.''', w=370, x=80, y=210)
-        creation.create_message(self.__master, '''Notas
-
-        Este software no sera desarrollado bajo ninguna metodologia
-        en especial, ni tampoco se le aplicara un plan de pruebas
-        estructurado. Por tal motivo, es posible que contenga una
-        cantidad produente de errores.''', w=370, x=460, y=210)
-        creation.create_frame(self.__master, g_width=5, g_height=125, side=NONE, g_pad_x=10, g_pad_y=0, pack=0, gx=430,
-                              gy=210, place_pre=0, config_edge=RIDGE)
-        creation.create_label(self.__master, text="", xc=60, yc=25, side=NONE,
-                              img_url=self.photo)  # No esta agregando la imagen
-        creation.create_frame(self.__master, g_width=745, g_height=5, side=0, g_pad_x=0, g_pad_y=0, pack=0, gx=70,
-                              gy=360, place_pre=0, config_edge=RIDGE)
+        self.__parameters_ui_p()
+        return
 
     def parameters_ui_pmt(self):
         print("Polinomio de Mclaurin/Taylor")
@@ -47,21 +34,31 @@ class parameters_interfaces:
         print("Metodo de Newton")
 
 
-class creation(parameters_interfaces):
-    def __init__(self, master, heigth, width):
-        super(creation, self).__init__(master)
-        self.in_tree = rd.parse("menu.xml")
-        self.__root = self.in_tree.getroot()
+class creation:
+    def __init__(self, master, width):
+        # super(creation, self).__init__(master)
+        self.__in_tree = rd.parse("menu.xml")
+        self.__root = self.__in_tree.getroot()
         self.__master = master
-        self.console = NONE
-        self.heigth = heigth
-        self.width = width
-        # variables iniciales
+        self.__console = NONE
+        # self.height = height
+        self.__width = width
+
+    @property
+    def master(self):
+        return self.__master
+
+    def __str__(self):
+        return str(self.__master)
+
+    @master.setter
+    def master(self, text):
+        self.__master = text
 
     @staticmethod
-    def create_labelframe(container, text="Default", g_padx=0, g_pady=0):
+    def create_labelframe(container, text="Default", g_pad_x=0, g_pad_y=0):
         print("Crea label frame")
-        l_frame = LabelFrame(container, text=text, padx=g_padx, pady=g_pady)
+        l_frame = LabelFrame(container, text=text, padx=g_pad_x, pady=g_pad_y)
         l_frame.pack(fill="both", expand="yes")
         return l_frame
 
@@ -85,37 +82,39 @@ class creation(parameters_interfaces):
         for child in self.__root:
             try:
                 self.__create_submenu(menu, child.attrib["title"], "", child.attrib["command"])
-            except TypeError:
+            except:
                 for child_child in child.getchildren():
                     if len(child_child.getchildren()) > 0:
                         for grandchild in child_child.getchildren():
                             self.__create_submenu(menu, child.attrib["title"], grandchild.text,
                                                   grandchild.attrib["command"])
+                            menu.add_separator()
 
     @staticmethod
-    def __create_scroll(container, Gorient):  # Contenedor y la orientación.
-        scrollbar = Scrollbar(container, orient=Gorient)  # orient=Gorient
+    def __create_scroll(container, g_orient):  # Contenedor y la orientación.
+        scrollbar = Scrollbar(container, orient=g_orient)  # orient=Gorient
         scrollbar.pack(side=RIGHT, fill=Y)
         return scrollbar
 
     @staticmethod
     def __create_lisbox(container, g_height, g_width=50, command=NONE, eje=NONE):  # Crea una lista
         lst_box = Listbox(container, height=g_height, width=g_width)
-        if eje == "y": lst_box['yscrollcommand'] = command.set
-        if eje == "x": lst_box['xscrollcommand'] = command.set
+        if eje == "y":
+            lst_box['yscrollcommand'] = command.set
+        if eje == "x":
+            lst_box['xscrollcommand'] = command.set
         lst_box["bg"] = "#fff"
         return lst_box
 
     def create_menu(self):
-        # self.parameters_ui_p()
         menu = self.__init_menu()
         self.__defined_structure_menu(menu)
 
     def __create_console(self):
-        Eje = "y"
+        eje = "y"
         y_scrollbar = self.__create_scroll(self.__master, VERTICAL)
-        list_scrollbar = self.__create_lisbox(self.__master, 5, self.width, y_scrollbar, eje="y")
-        if Eje == "y":
+        list_scrollbar = self.__create_lisbox(self.__master, 5, self.__width, y_scrollbar, eje="y")
+        if eje == "y":
             y_scrollbar['command'] = list_scrollbar.yview
         else:
             y_scrollbar['command'] = list_scrollbar.xview
@@ -126,25 +125,26 @@ class creation(parameters_interfaces):
 
     @property
     def create_console(self):
-        self.console = self.__create_console()
-        return self.console
+        self.__console = self.__create_console()
+        return self.__console
 
     @create_console.setter
     def create_console(self, element):
-        self.console.insert(END, time.strftime("%c") + " >> " + element)
-        self.console.see(END)
+        self.__console.insert(END, time.strftime("%c") + " >> " + element)
+        self.__console.see(END)
 
     @staticmethod
-    def create_message(container, text, w, x, y):
+    def __create_message(container, text, w, x, y):
         msg = Message(container, width=w)
         msg.place(x=x, y=y)
         msg.configure(text=text)
 
     @staticmethod
-    def create_frame(container, g_width, g_height, side, g_pad_x, g_pad_y, pack, gx, gy, place_pre, config_edge):
+    def __create_frame(container, g_width, g_height, side, g_pad_x, g_pad_y, pack, gx, gy, place_pre, config_edge):
         if pack == 0:
             frame = Frame(container, width=g_width, height=g_height)
-            if place_pre == 0: frame.place(x=gx, y=gy)
+            if place_pre == 0:
+                frame.place(x=gx, y=gy)
         else:
             frame = Frame(container, width=g_width, height=g_height, padx=g_pad_x, pady=g_pad_y)
             frame.pack(side=side, padx=g_pad_x, pady=g_pad_y)
@@ -153,18 +153,57 @@ class creation(parameters_interfaces):
         return frame
 
     @staticmethod  # REVISIÓN
-    def create_label(container, text="Default", xc=0, yc=0, side=NONE, img_url=NONE):
+    def __create_label(container, text="Default", xc=0, yc=0, side=NONE, img_url=NONE):
         if xc >= 0 and yc >= 0:
             if text != "":
-                LblTexNor = Label(container, text=text + " = ").place(x=xc, y=yc)
+                Label(container, text=text + " = ").place(x=xc, y=yc)
             else:
                 try:
-                    LblTexNor = Label(container, relief=SOLID, image=img_url).place(x=xc, y=yc)
+                    Label(container, image=img_url).place(x=xc, y=yc)
+                    Label.mainloop(container)
                 except ImportWarning:
                     print("Error")
-                    # self.insertLisBox(listbox,"No se ha podido cargar la imagen, es posible que la imagen no se encuentre en la ruta por defecto!!!",LEFT, "cls")
         else:
-            LblTexNor = Label(container, text=text).pack(side=side)
+            Label(container, text=text).pack(side=side)
+
+    @property
+    def parameters_ui_p(self):
+        self.__create_message(self.__master, '''Métodos Numéricos
+
+        Metodologías que utilizan operaciones algebraicas
+        y aritmeticas para resolver de forma aproximada 
+        ecuaciones complejas, en muchos de ellos es requerido 
+        derivadas, integrales y ecuaciones difereniales.''', w=370, x=80, y=210)
+        self.__create_message(self.__master, '''Notas
+
+        Este software no sera desarrollado bajo ninguna metodologia
+        en especial, ni tampoco se le aplicara un plan de pruebas
+        estructurado. Por tal motivo, es posible que contenga una
+        cantidad produente de errores.''', w=370, x=460, y=210)
+        self.__create_frame(self.__master, g_width=5, g_height=125, side=NONE, g_pad_x=10, g_pad_y=0, pack=0, gx=430,
+                            gy=210, place_pre=0, config_edge=RIDGE)
+        self.photo = PhotoImage(file="img\ctb.png") # Posible inserción en parametros
+        self.__create_frame(self.__master, g_width=745, g_height=5, side=0, g_pad_x=0, g_pad_y=0, pack=0, gx=70,
+                            gy=360, place_pre=0, config_edge=RIDGE)
+        self.__create_label(self.__master, text="", xc=60, yc=25, side=NONE,
+                            img_url=self.photo)  # No esta agregando la imagen
+        return
+
+    def parameters_ui_pmt(self):
+        print("")
+        return print("")
+
+    def parameters_ui_snp(self):
+        print("")
+        return print("")
+
+    def parameters_ui_fb(self):
+        print("")
+        return print("")
+
+    def parameters_ui_mn(self):
+        print("")
+        return print("")
 
 # class console:
 #
