@@ -22,21 +22,20 @@ def start_gui(title, op_g, sg):
 class windows:
     def __init__(self, master, init, sg, h, w):
         self.prin = master
-        self.c_UI = c.creation(master, h, w)  # Inicializa instancia de creación
+        self.c_UI = c.creation(master, w)  # Inicializa instancia de creación
         self.console = NONE
-        self.ERELget = IntVar()
-        self.EABSget = IntVar()
-        self.NumSIS = StringVar()
-        self.Xget = StringVar()
-        self.X = StringVar()
+        # self.ERELget = IntVar()
+        # self.EABSget = IntVar()
+        # self.NumSIS = StringVar()
+        # self.Xget = StringVar()
+        # self.X = StringVar()
         self.__defined_images()
-        self.FuncionGET = StringVar()
+        # self.FuncionGET = StringVar()
         self.create_elements(init, sg)
 
     def __defined_images(self):
         self.ctb_img = PhotoImage(file="img\ctb.png")
         self.taylor_img = PhotoImage(file="img\ml_taylor.png")
-        # self.c_UI.createLabel(self.prin, text="", xc=60, yc=25, side=NONE, img_url=self.taylor_img)
 
     # def createMenu(self):# ---> Pertenece a todas las opciones
     #     menu = Menu(self.prin) #Inicia menu
@@ -113,7 +112,7 @@ class windows:
         return TopLevel
 
     def get_choice(self, arg):
-        switcher = {'P': self.c_UI.parameters_ui_p, 'PMT': self.c_UI.parameters_ui_pmt(),
+        switcher = {'P': self.c_UI.parameters_ui_p, 'PMT': self.c_UI.parameters_ui_pmt,
                     'SNP': self.c_UI.parameters_ui_snp, 'FB': self.c_UI.parameters_ui_fb,
                     'MN': self.c_UI.parameters_ui_mn, }
         return switcher.get(arg, "nothing")
@@ -274,16 +273,14 @@ class windows:
         return textgen
 
     def create_elements(self, init_choice, sg):
-        self.c_UI.create_labelframe(self.prin, sg, 10, 10)  # Contenedor de los parametros de interfaz.
+        container_head = self.c_UI.create_labelframe(self.prin, sg, 10, 10)
         self.c_UI.create_menu()
-
         self.console = self.c_UI.create_console
         self.c_UI.create_console = "Consola creada"
 
-        exec_choice = self.get_choice(init_choice)
-        self.c_UI.create_console = "Cargando elementos"
-        exec_choice()
-        self.c_UI.create_console = "Elementos cargados"
+        self.c_UI.master = container_head
+        self.get_choice(init_choice) # container_head queda corriendo
+        # self.c_UI.create_console = "Elementos cargados" # A estar el mainloop no deja agregar.
 
     def createSpinbox(self, Contenedor, desde, hasta, gx, gy, grw):
         spinbox = Spinbox(Contenedor, from_=desde, to=hasta)
@@ -328,20 +325,20 @@ class windows:
     #     LFrame.pack(fill="both", expand="yes")
     #     return LFrame
 
-    def createLabel(self, container, text="DEFAULT", xc=0, yc=0, side=NONE, imgURL=NONE):
-
-        if xc >= 0 and yc >= 0:
-            if text != "":  # Si tiene text="" lo que se agrega es una imagen
-                Label(container, text=text + " = ").place(x=xc, y=yc)
-            else:
-                try:
-                    Label(container, relief="solid", image=self.ctb_img).place(x=xc, y=yc)
-                    # Label_text_norm = Label(container, relief="solid", image=logoCTB).place(x=xc, y=yc)
-                except:
-                    self.insertElement_Console("No se ha podido cargar la imagen")
-        else:
-            Label(container, text=text).pack(side=side)
-        # return Label_text_norm
+    # def createLabel(self, container, text="DEFAULT", xc=0, yc=0, side=NONE, imgURL=NONE):
+    #     if xc >= 0 and yc >= 0:
+    #         if text != "":  # Si tiene text="" lo que se agrega es una imagen
+    #             Label(container, text=text + " = ").place(x=xc, y=yc)
+    #         else:
+    #             try:
+    #                 Label(container, relief="solid", image=self.ctb_img).place(x=xc, y=yc)
+    #                 print("agregado")
+    #                 # Label_text_norm = Label(container, relief="solid", image=logoCTB).place(x=xc, y=yc)
+    #             except:
+    #                 self.insertElement_Console("No se ha podido cargar la imagen")
+    #     else:
+    #         Label(container, text=text).pack(side=side)
+    #     # return Label_text_norm
 
     def createEntry(self, Contenedor, command=StringVar, xc=0, yc=0, grw=NONE):
         print("Crea entry")
