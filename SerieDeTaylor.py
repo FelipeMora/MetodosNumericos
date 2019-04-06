@@ -8,34 +8,47 @@ except ImportError:
     import tkinter.ttk as ttk
 
 
-def start_gui(title, op_g, sg):
-    global WI, H
-    WI = "879"  # 593
-    H = "680"  # 460
-    root = Tk()
-    root.geometry(WI + "x" + H + "+379+66")
-    root.title(title)
-    windows(root, op_g, sg, H, WI)
-    root.mainloop()
+# def start_gui(title, op_g, sg):
+#     global WI, H
+#     WI = "879"  # 593
+#     H = "680"  # 460
+#     root = Tk()
+#     root.geometry(WI + "x" + H + "+379+66")
+#     root.title(title)
+#     windows(root, op_g, sg, WI)
+#     print("mainloop")
+#     root.mainloop()
+
+
+class Application:
+    def __init__(self, title, op_g, sg):
+        self.__container_root_width = "879"
+        self.__container_root_height = "680"
+        __container_root = Tk()
+        __container_root.geometry(self.__container_root_width + "x" + self.__container_root_height + "+379+66")
+        __container_root.title(title)
+        windows(__container_root, op_g, sg, self.__container_root_width)
+        # __container_root.mainloop()  # mainloop on __container_root
 
 
 class windows:
-    def __init__(self, master, init, sg, h, w):
-        self.prin = master
-        self.c_UI = c.creation(master, w)  # Inicializa instancia de creación
+    def __init__(self, master, init, text_init, width_master):
+        self.__container_root = master
+        self.c_UI = c.creation(self.__container_root, width_master, "img\ctb.png")  # initialize instance of create
         self.console = NONE
+        self.__ctb_img = PhotoImage(file="img\ctb.png")
         # self.ERELget = IntVar()
         # self.EABSget = IntVar()
         # self.NumSIS = StringVar()
         # self.Xget = StringVar()
         # self.X = StringVar()
-        self.__defined_images()
+        # self.__defined_images()
         # self.FuncionGET = StringVar()
-        self.create_elements(init, sg)
+        self.create_elements(init, text_init)
 
-    def __defined_images(self):
-        self.ctb_img = PhotoImage(file="img\ctb.png")
-        self.taylor_img = PhotoImage(file="img\ml_taylor.png")
+    # def __defined_images(self):
+
+    #    self.taylor_img = PhotoImage(file="img\ml_taylor.png")
 
     # def createMenu(self):# ---> Pertenece a todas las opciones
     #     menu = Menu(self.prin) #Inicia menu
@@ -112,7 +125,8 @@ class windows:
         return TopLevel
 
     def get_choice(self, arg):
-        switcher = {'P': self.c_UI.parameters_ui_p, 'PMT': self.c_UI.parameters_ui_pmt,
+        switcher = {'P': self.c_UI.parameters_ui_p,
+                    'PMT': self.c_UI.parameters_ui_pmt,
                     'SNP': self.c_UI.parameters_ui_snp, 'FB': self.c_UI.parameters_ui_fb,
                     'MN': self.c_UI.parameters_ui_mn, }
         return switcher.get(arg, "nothing")
@@ -273,14 +287,17 @@ class windows:
         return textgen
 
     def create_elements(self, init_choice, sg):
-        container_head = self.c_UI.create_labelframe(self.prin, sg, 10, 10)
+        container_head = self.c_UI.create_labelframe(self.__container_root, sg, 10, 10)
         self.c_UI.create_menu()
         self.console = self.c_UI.create_console
-        self.c_UI.create_console = "Consola creada"
+        self.c_UI.create_console = "Console create"
 
         self.c_UI.master = container_head
-        self.get_choice(init_choice) # container_head queda corriendo
-        # self.c_UI.create_console = "Elementos cargados" # A estar el mainloop no deja agregar.
+        self.get_choice(init_choice)  # On container_head running
+        self.c_UI.create_console = "All charged"
+        self.c_UI.master.mainloop()  # Mainloop on container_head
+        # The mainloop is not done on __container_root, on the contrary it is done
+        # on the master variable containing the head assigned to the class c_UI
 
     def createSpinbox(self, Contenedor, desde, hasta, gx, gy, grw):
         spinbox = Spinbox(Contenedor, from_=desde, to=hasta)
@@ -404,4 +421,5 @@ class windows:
 
 
 if __name__ == '__main__':
-    start_gui("Métodos Númericos V.0.0.1", "P", "Principal")
+    Application("Métodos Númericos V.0.0.1", "P", "Principal")
+    #start_gui("Métodos Númericos V.0.0.1", "P", "Principal")
