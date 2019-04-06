@@ -293,6 +293,7 @@ class windows:
         self.c_UI.create_console = "Console create"
 
         self.c_UI.master = container_head
+        # If you do not use container_head, the create.__create_label class needs changes.
         self.get_choice(init_choice)  # On container_head running
         self.c_UI.create_console = "All charged"
         self.c_UI.master.mainloop()  # Mainloop on container_head
