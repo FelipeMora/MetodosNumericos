@@ -11,7 +11,7 @@
     <menu title="Interpolación">
         <sub_menu>
             <section command="MN">Metodo de Newton</section>
-            <section command="MN">Metodo de Newton</section> <!-- Problemas al agregar mas sub hijos -->
+            <section command="MB">Metodo de Bisección</section>
         </sub_menu>
     </menu>
     <menu title="Teorema de valor intermedio" command="TVI"/>

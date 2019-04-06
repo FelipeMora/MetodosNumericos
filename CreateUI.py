@@ -48,16 +48,15 @@ class creation:
     def master(self):
         return self.__master
 
-    def __str__(self):
-        return str(self.__master)
-
     @master.setter
     def master(self, text):
         self.__master = text
 
+    def __str__(self):
+        return str(self.__master)
+
     @staticmethod
     def create_labelframe(container, text="Default", g_pad_x=0, g_pad_y=0):
-        print("Crea label frame")
         l_frame = LabelFrame(container, text=text, padx=g_pad_x, pady=g_pad_y)
         l_frame.pack(fill="both", expand="yes")
         return l_frame
@@ -69,16 +68,19 @@ class creation:
         return menu
 
     @staticmethod
-    def __create_submenu(menu, title, sub, cmad):  # titles debe ser una lista)
+    def __create_submenu(menu, title, list_child, cmad):  # titles debe ser una lista)
         sub_menu = Menu(menu)
         menu.configure(relief=GROOVE, borderwidth="10")
-        if sub == "":
+        if list_child == "":
             menu.add_command(label=title, command=cmad)
         else:
-            menu.add_cascade(label=title, menu=sub_menu), sub_menu.add_command(label=sub, command=cmad)
+            menu.add_cascade(label=title, menu=sub_menu)
+            for index in list_child:
+                sub_menu.add_command(label=index, command=list_child[index])
         return menu
 
     def __defined_structure_menu(self, menu):
+        list_grandchild = {}  # Dictionary
         for child in self.__root:
             try:
                 self.__create_submenu(menu, child.attrib["title"], "", child.attrib["command"])
@@ -86,9 +88,10 @@ class creation:
                 for child_child in child.getchildren():
                     if len(child_child.getchildren()) > 0:
                         for grandchild in child_child.getchildren():
-                            self.__create_submenu(menu, child.attrib["title"], grandchild.text,
-                                                  grandchild.attrib["command"])
-                            menu.add_separator()
+                            # Problem : If you have much child´s for each chill will create a father.
+                            list_grandchild.update({grandchild.text: grandchild.attrib["command"]})
+                        self.__create_submenu(menu, child.attrib["title"], list_grandchild, "")
+                        list_grandchild.clear()
 
     @staticmethod
     def __create_scroll(container, g_orient):  # Contenedor y la orientación.
@@ -182,11 +185,11 @@ class creation:
         cantidad produente de errores.''', w=370, x=460, y=210)
         self.__create_frame(self.__master, g_width=5, g_height=125, side=NONE, g_pad_x=10, g_pad_y=0, pack=0, gx=430,
                             gy=210, place_pre=0, config_edge=RIDGE)
-        self.photo = PhotoImage(file="img\ctb.png") # Posible inserción en parametros
+        photo = PhotoImage(file="img\ctb.png")  # Posible inserción en parametros
         self.__create_frame(self.__master, g_width=745, g_height=5, side=0, g_pad_x=0, g_pad_y=0, pack=0, gx=70,
                             gy=360, place_pre=0, config_edge=RIDGE)
         self.__create_label(self.__master, text="", xc=60, yc=25, side=NONE,
-                            img_url=self.photo)  # No esta agregando la imagen
+                            img_url=photo)  # No esta agregando la imagen
         return
 
     def parameters_ui_pmt(self):
