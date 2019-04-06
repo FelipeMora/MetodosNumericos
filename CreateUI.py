@@ -35,7 +35,7 @@ class parameters_interfaces:
 
 
 class creation:
-    def __init__(self, master, width):
+    def __init__(self, master, width, img_url):
         # super(creation, self).__init__(master)
         self.__in_tree = rd.parse("menu.xml")
         self.__root = self.__in_tree.getroot()
@@ -43,6 +43,8 @@ class creation:
         self.__console = NONE
         # self.height = height
         self.__width = width
+        self.__add_photo = PhotoImage(file=img_url)
+        # self.photo = PhotoImage(file="img\ctb.png")
 
     @property
     def master(self):
@@ -162,8 +164,7 @@ class creation:
                 Label(container, text=text + " = ").place(x=xc, y=yc)
             else:
                 try:
-                    Label(container, image=img_url).place(x=xc, y=yc)
-                    Label.mainloop(container)
+                    Label(container, image=img_url).pack(padx=10, pady=10)
                 except ImportWarning:
                     print("Error")
         else:
@@ -185,11 +186,10 @@ class creation:
         cantidad produente de errores.''', w=370, x=460, y=210)
         self.__create_frame(self.__master, g_width=5, g_height=125, side=NONE, g_pad_x=10, g_pad_y=0, pack=0, gx=430,
                             gy=210, place_pre=0, config_edge=RIDGE)
-        photo = PhotoImage(file="img\ctb.png")  # Posible inserción en parametros
         self.__create_frame(self.__master, g_width=745, g_height=5, side=0, g_pad_x=0, g_pad_y=0, pack=0, gx=70,
                             gy=360, place_pre=0, config_edge=RIDGE)
         self.__create_label(self.__master, text="", xc=60, yc=25, side=NONE,
-                            img_url=photo)  # No esta agregando la imagen
+                            img_url=self.__add_photo)  # No esta agregando la imagen
         return
 
     def parameters_ui_pmt(self):
