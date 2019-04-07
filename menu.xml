@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <collection>
-    <menu title="Principal" command="P"/>
+    <menu title="Principal" command="P" P="true"/>
     <menu title="Aproximaciones basicas">
         <sub_menu>
-            <section command="PMT">Polinomio de Mclaurin/Taylor</section>
+            <section command="PMT" PMT="true">Polinomio de Mclaurin/Taylor</section>
         </sub_menu>
     </menu>
-    <menu title="Sistema de numeración posicional" command="SNP"/>
-    <menu title="Fracciones binarias" command="FB"/>
+    <menu title="Sistema de numeración posicional" command="SNP" SNP="true"/>
+    <menu title="Fracciones binarias" command="FB" FB="true"/>
     <menu title="Interpolación">
         <sub_menu>
-            <section command="MN">Metodo de Newton</section>
-            <section command="MB">Metodo de Bisección</section>
+            <section command="MN" MN="true">Metodo de Newton</section>
+            <section command="MB" MB="true">Metodo de Bisección</section>
         </sub_menu>
     </menu>
-    <menu title="Teorema de valor intermedio" command="TVI"/>
-    <menu title="Teorema generalizado de Rolle" command="TGR"/>
+    <menu title="Teorema de valor intermedio" command="TVI" TVI="true"/>
+    <menu title="Teorema generalizado de Rolle" command="TGR" TGR="true"/>
 </collection>

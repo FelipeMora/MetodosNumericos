@@ -91,9 +91,16 @@ class creation:
                     if len(child_child.getchildren()) > 0:
                         for grandchild in child_child.getchildren():
                             # Problem : If you have much child´s for each chill will create a father.
-                            list_grandchild.update({grandchild.text: grandchild.attrib["command"]})
+                            list_grandchild.update({grandchild.text: self.__search_command(child.attrib)})
                         self.__create_submenu(menu, child.attrib["title"], list_grandchild, "")
                         list_grandchild.clear()
+
+    @staticmethod
+    def __search_command(child_attrib):
+        for index in child_attrib:
+            if child_attrib[index] == "true":
+                return index
+
 
     @staticmethod
     def __create_scroll(container, g_orient):  # Contenedor y la orientación.
