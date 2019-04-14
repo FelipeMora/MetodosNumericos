@@ -85,7 +85,10 @@ class creation:
         list_grandchild = {}  # Dictionary
         for child in self.__root:
             try:
-                self.__create_submenu(menu, child.attrib["title"], "", child.attrib["command"])
+                # Added : Condition for evaluate the parameter "only" inside "child.attrib" Solution to : Yes is
+                # added "self.__search_command(child.attrib", always will the same and do not enter to except.
+                if child.attrib["only"]:
+                    self.__create_submenu(menu, child.attrib["title"], "", self.__search_command(child.attrib))
             except:
                 for child_child in child.getchildren():
                     if len(child_child.getchildren()) > 0:
@@ -100,7 +103,6 @@ class creation:
         for index in child_attrib:
             if child_attrib[index] == "true":
                 return index
-
 
     @staticmethod
     def __create_scroll(container, g_orient):  # Contenedor y la orientación.
