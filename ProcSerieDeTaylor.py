@@ -9,27 +9,27 @@ except ImportError:
 
 
 class metodosyseries:
-
-    def __init__(self, other, Op):
+    # other, Op
+    def __init__(self):
         print("Estoy en ProcSerieDeTaylor.py")
-        #self.AproximacionLineal() # Prueba de Aproximación Lienal
+        self.AproximacionLineal() # Prueba de Aproximación Lienal
         #print(str(SerieDeTaylor.windows.listbox))
-        self.clsprin = other
+        #self.clsprin = other
         #Clasita.retunVAL(Clasita)
-        SerieDeTaylor.windows.insertLisBox(other,other.listbox,"Ejecutando...", SerieDeTaylor.LEFT, "cls")
-        self.Orden = []
-        if Op == '1':
-            self.SerieTaylor();
-        elif Op == '2':
-            self.MetodoNewton();
-        elif Op == '3':
-            self.MetodoBiseccion();
-        elif Op == '4':
-            self.MetodoSecante();
-        elif Op == '5':
-            self.AproximacionLineal();
-        elif Op == '6':
-            self.ConvertBase()
+        #SerieDeTaylor.windows.insertLisBox(other,other.listbox,"Ejecutando...", SerieDeTaylor.LEFT, "cls")
+        # self.Orden = []
+        # if Op == '1':
+        #     self.SerieTaylor()
+        # elif Op == '2':
+        #     self.MetodoNewton()
+        # elif Op == '3':
+        #     self.MetodoBiseccion()
+        # elif Op == '4':
+        #     self.MetodoSecante()
+        # elif Op == '5':
+        #     self.AproximacionLineal()
+        # elif Op == '6':
+        #     self.ConvertBase()
 
     def SerieTaylor(self):
         F_Derivar = self.clsprin.FuncionGET.get()
@@ -227,7 +227,7 @@ class metodosyseries:
             for A in range(0,int(len(ValX)/2)):
                 print("|---" + ValX[A*2] +  "---|---" + ValX[(A*2)+1] + "---|")
         SumasVAL = self.sumaVAL(ValX)
-        MutiVAL = self.MuliVAL(ValX)
+        MutiVAL = self.MultiVAL(ValX)
         Elevar = self.Ala(ValX)
         self.CoeCor(CantVal,MutiVAL,SumasVAL,Elevar)
         self.RegresionCuadratica(CantVal,SumasVAL,MutiVAL,Elevar)
@@ -242,48 +242,51 @@ class metodosyseries:
         print("SumaY = " + str(SumaY));"""
         return str(SumaX)+", "+str(SumaY)
 
-    def MuliVAL(sef,Val):
-        MultVAL = 0;
-        for J in range(0,int(len(Val)/2)):
-            MultVAL = (int(Val[(J*2)]) * int(Val[(J*2)+1]))+MultVAL;
+    def MultiVAL(self,Val):
+        MultVAL = 0
+        for J in range(0, int(len(Val) / 2)):
+            MultVAL = (int(Val[(J * 2)]) * int(Val[(J * 2) + 1])) + MultVAL;
         """print("E X*Y = " + str(MultVAL))"""
         return MultVAL
 
-    def Ala(self,Val):
+    def Ala(self, Val):
         XAla = 0;
         YAla = 0;
-        for J in range(0,int(len(Val)/2)):
-            YAla = (int(Val[((J*2)+1)])*int(Val[((J*2)+1)])) + YAla;
-            XAla = (int(Val[(J*2)])*int(Val[(J*2)])) + XAla;
+        for J in range(0, int(len(Val) / 2)):
+            YAla = (int(Val[((J * 2) + 1)]) * int(Val[((J * 2) + 1)])) + YAla;
+            XAla = (int(Val[(J * 2)]) * int(Val[(J * 2)])) + XAla;
         """print("E X^2 = " + str(XAla));
         print("E Y^2 = " + str(YAla));"""
-        return str(XAla)+", "+str(YAla)
+        return str(XAla) + ", " + str(YAla)
 
-    def RegresionCuadratica(self,CantVAL,SumasVAL,MutiVAL,Elevar):
+    def RegresionCuadratica(self, CantVAL, SumasVAL, MutiVAL, Elevar):
         SumaVAL = []
         Ala = []
         SumaVAL = SumasVAL.split(", ")
         Ala = Elevar.split(", ")
-        B=(int(CantVAL)*(MutiVAL)-((int(SumaVAL[0]))*(int(SumaVAL[1]))))/(int(CantVAL)*int(Ala[0])-(int(SumaVAL[0])*int(SumaVAL[0])))
-        A=((int(SumaVAL[1])-B*(int(SumaVAL[0])))/int(CantVAL))
+        B = (int(CantVAL) * (MutiVAL) - ((int(SumaVAL[0])) * (int(SumaVAL[1])))) / (
+        int(CantVAL) * int(Ala[0]) - (int(SumaVAL[0]) * int(SumaVAL[0])))
+        A = ((int(SumaVAL[1]) - B * (int(SumaVAL[0]))) / int(CantVAL))
         print("|--------------------------------------|")
         print("| Y = " + str(A) + " + " + str(B) + "x |")
         print("|--------------------------------------|")
-        self.predecir(A,B,"R")
+        self.predecir(A, B, "R")
 
-    def predecir(self,A,B,P):
+    def predecir(self, A, B, P):
         if P == 'R':
             print("Ingrese el Y a predecir")
             Yinput = input()
-            R=((A)+(B)*int(Yinput))
+            R = ((A) + (B) * int(Yinput))
             print("El valor aproximado de " + Yinput + " es : " + str(R))
 
-    def CoeCor(self,CantVal,MutiVal,SumasVAL,Elevar):
+    def CoeCor(self, CantVal, MutiVal, SumasVAL, Elevar):
         SumaVAL = []
         Ala = []
         SumaVAL = SumasVAL.split(", ")
         Ala = Elevar.split(", ")
-        Corre=(int(CantVal)*(MutiVal)-int(SumaVAL[0])*int(SumaVAL[1]))/(math.sqrt((int(CantVal)*int(Ala[0]))-int(SumaVAL[0])*int(SumaVAL[0]))*math.sqrt((int(CantVal)*int(Ala[1]))-int(SumaVAL[1])*int(SumaVAL[1])))
+        Corre = (int(CantVal) * (MutiVal) - int(SumaVAL[0]) * int(SumaVAL[1])) / (
+        math.sqrt((int(CantVal) * int(Ala[0])) - int(SumaVAL[0]) * int(SumaVAL[0])) * math.sqrt(
+            (int(CantVal) * int(Ala[1])) - int(SumaVAL[1]) * int(SumaVAL[1])))
         """R=(int(CantVal)*(MutiVal)-int(SumaVAL[0])*int(SumaVAL[1]))
         print("R ---> " + str(R))
         A=math.sqrt((int(CantVal)*int(Ala[0]))-int(SumaVAL[0])*int(SumaVAL[0]))
@@ -301,14 +304,14 @@ class metodosyseries:
         ai = int(a)
         ArrBanrio = []
         while ni // ai != 0:
-            ArrBanrio.insert(len(ArrBanrio), str(ni%ai))
-            ni = ni //ai
+            ArrBanrio.insert(len(ArrBanrio), str(ni % ai))
+            ni = ni // ai
         j = len(ArrBanrio) - 1
         numBin = ""
         while j >= 0:
             numBin = numBin + "" + ArrBanrio[j]
             j = j - 1
-        self.clsprin.textViewGEN.insert(END,n + " a base 2 = "+ numBin + " ~~~~~~~~")
+        self.clsprin.textViewGEN.insert(END, n + " a base 2 = " + numBin + " ~~~~~~~~")
 
 #if Op == '1':
 #    SerieTaylor();
@@ -323,3 +326,6 @@ class metodosyseries:
 
 
 #Resolver la funcion para saber valor real
+
+if __name__ == '__main__':
+    metodosyseries()
