@@ -8,18 +8,32 @@ class rdxml:
         self.in_tree = rd.parse("menu.xml")
         self.__root = self.in_tree.getroot()
         self.__dat_menu = []
-        #for child in self.root.findall("./menu/[@comand]"):#Los que tienen comand.
+        # for child in self.root.findall("./menu/[@comand]"):#Los que tienen comand.
         #    print(child.attrib["comand"])
 
-    def defind_estructure(self):
+    def defined_structure(self):
         for child in self.__root:
-            try: self.set_arr(child.attrib["title"] + "," + child.attrib["comand"])
-            except: self.set_arr(child.attrib["title"])
+            # En teoria conoce "P" =  true, así que realmente si podría
+            # conocerlo de una forma mas sencilla que pasar de XML a Diccionario
+            try:
+                # for index in child.attrib:
+                #     if child.attrib[index] == "true":
+                #         print("El command is %s" % index)
+                # print(self.__search_command(child.attrib))
+                self.set_arr(child.attrib["title"] + "," + self.__search_command(child.attrib))
+            except:
+                self.set_arr(child.attrib["title"])
             for child_child in child.getchildren():
                 if len(child_child.getchildren()) > 0:
                     for grandchild in child_child.getchildren():
-                        self.set_arr(grandchild.text + "," + grandchild.attrib["comand"])
-                        #Relación directa con CreateUI, especificamente con createSubMenu
+                        self.set_arr(grandchild.text + "," + self.__search_command(grandchild.attrib))
+                        # Relación directa con CreateUI, especificamente con createSubMenu
+
+    @staticmethod
+    def __search_command(child_attrib):
+        for index in child_attrib:
+            if child_attrib[index] == "true":
+                return str(index)
 
     def set_arr(self,dat_set):
         dat_split = dat_set.split(',')
@@ -33,13 +47,13 @@ class rdxml:
     def get_arr_dat(self):
         return self.__dat_menu
 
-    #@get_arr_dat.setter
-    #def get_arr_dat(self,tree):
+    # @get_arr_dat.setter
+    # def get_arr_dat(self,tree):
     #    print("Cambio de arbol")
 
 if __name__ == '__main__':
     v = rdxml()
-    v.defind_estructure()
+    v.defined_structure()
     menu = v.get_arr_dat
     for i in range(len(menu)):
-        print(menu[i])
+      print(menu[i])
