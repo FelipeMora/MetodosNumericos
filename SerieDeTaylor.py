@@ -131,6 +131,10 @@ class windows:
                     'MN': self.c_UI.parameters_ui_mn, }
         return switcher.get(arg, "nothing")
 
+    @staticmethod
+    def P(self):
+        print("Pues tendre que hace algo, digo!")
+
     #     def createGUIPrin(self):  # Carga todos los elementos que conforman la interfaz
     #         self.insertElement_Console("Cargando parametros principales...")
     #         self.c_UI.createMessage(self.prin,'''Métodos Numéricos
@@ -423,4 +427,7 @@ class windows:
 
 if __name__ == '__main__':
     Application("Métodos Númericos V.0.0.1", "P", "Principal")
-    #start_gui("Métodos Númericos V.0.0.1", "P", "Principal")
+
+
+def PMT():
+    print("aaaaaaaaaaaaaaaaaaaaaa")
